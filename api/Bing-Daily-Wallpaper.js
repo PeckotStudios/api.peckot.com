@@ -24,7 +24,7 @@ module.exports = (req, res) => {
     axios.get(_url + '/HPImageArchive.aspx?cc=' + _area + '&format=js&idx=' + _dateback + '&n=' + _num).then(response => {
         const data = JSON.parse(response.data);
         if (_type == 'image') {
-            res.status(200).type('png').location(_url + (data.images[0].url).replace('1920x1080', _size));
+            res.type('png').location(_url + (data.images[0].url).replace('1920x1080', _size));
             return;
         } else {
             var _data = new Array();
@@ -37,7 +37,7 @@ module.exports = (req, res) => {
                     hashcode: image.hsh,
                 });
             }
-            res.status(200).jsonp({
+            res.jsonp({
                 code: 200,
                 message: 'Data request succeeded!',
                 data: _data,
@@ -45,7 +45,7 @@ module.exports = (req, res) => {
             return;
         }
     }).catch(error => {
-        res.status(400).jsonp({
+        res.jsonp({
             code: 400,
             message: 'Data request failed! Error: ' + error,
             advice: 'Confirm whether your parameters are correct.',
