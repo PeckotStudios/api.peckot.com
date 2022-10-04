@@ -22,6 +22,7 @@ module.exports = (req, res) => {
 
     // Main process
     axios.get(_url + '/HPImageArchive.aspx?cc=' + _area + '&format=js&idx=' + _dateback + '&n=' + _num).then(response => {
+        console.log(new String(response.data))
         const data = JSON.parse(new String(response.data));
         if (_type == 'image') {
             res.type('png').location(_url + (data.images[0].url).replace('1920x1080', _size));
