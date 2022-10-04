@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/.lib/API.php';
+require __DIR__ . '/.lib/API.php';
 
 use Pectics\API;
 
@@ -10,12 +10,12 @@ $country = isset($_GET['country']) ? $_GET['country'] : 'cn';
 $type = isset($_GET['type']) ? $_GET['type'] : 'json';
 $abroad = isset($_GET['abroad']) ? $_GET['abroad'] : 'false';
 $size = isset($_GET['size']) ? $_GET['size'] : '1920x1080';
-$date = isset($_GET['date']) ? ( $_GET['date'] < 0 ? 0 : $_GET['date'] ) : 0;
-$number = isset($_GET['number']) ? ( $_GET['number'] < 1 ? 1 : $_GET['number'] ) : 1;
+$date = isset($_GET['date']) ? ($_GET['date'] < 0 ? 0 : $_GET['date']) : 0;
+$number = isset($_GET['number']) ? ($_GET['number'] < 1 ? 1 : $_GET['number']) : 1;
 
 $url = 'https://cn.bing.com';
 
-switch($type) {
+switch ($type) {
     case 'array':
         header('Content-type: text/array');
         break;
@@ -27,7 +27,7 @@ switch($type) {
         break;
 }
 
-switch($size) {
+switch ($size) {
     case '1920x1200':
         $size = '1920x1200';
         break;
@@ -57,21 +57,21 @@ switch($size) {
         break;
 }
 
-if($abroad == 'true') {
+if ($abroad == 'true') {
     $url = 'https://www.bing.com';
 }
-if($number > 1 && $type == 'image') {
+if ($number > 1 && $type == 'image') {
     $number = 1;
 }
-if($number > 8) {
+if ($number > 8) {
     $number = 8;
 }
 
-$data = json_decode(file_get_contents('https://www.bing.com/HPImageArchive.aspx?cc='.$country.'&format=js&idx='.$date.'&n='.$number), true);
+$data = json_decode(file_get_contents('https://www.bing.com/HPImageArchive.aspx?cc=' . $country . '&format=js&idx=' . $date . '&n=' . $number), true);
 $images = array();
-for($i=0;$i<$number;$i++) {
+for ($i = 0; $i < $number; $i++) {
     $images[$i]['date'] = $data['images'][$i]['enddate'];
-    $images[$i]['url'] = $url.str_replace('1920x1080', $size, $data['images'][$i]['url']);
+    $images[$i]['url'] = $url . str_replace('1920x1080', $size, $data['images'][$i]['url']);
     $images[$i]['copyright'] = $data['images'][$i]['copyright'];
     $images[$i]['copyrightlink'] = $data['images'][$i]['copyrightlink'];
     $images[$i]['hashcode'] = $data['images'][$i]['hsh'];
@@ -80,23 +80,22 @@ for($i=0;$i<$number;$i++) {
 $result = $data == null ? $api->outputError(
     400,
     'Error: Data request failed!',
-    'Confirm whether your parameters are correct.', 
+    'Confirm whether your parameters are correct.',
     array()
-    ) : $api->outputInfo(
-        200,
-        'Data request succeeded!',
-        array('images'   => $images,)
-        );
-switch($type) {
+) : $api->outputInfo(
+    200,
+    'Data request succeeded!',
+    array('images'   => $images,)
+);
+switch ($type) {
     case 'array':
         print_r($result);
         break;
     case 'image':
-        header('location:'.$result['images'][0]['url']);
+        header('location:' . $result['images'][0]['url']);
         //imagejpeg(@imagecreatefromjpeg($result['images'][0]['url']));
         break;
     default:
-        print_r(json_encode($result, JSON_NUMERIC_CHECK|JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
+        print_r(json_encode($result, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         break;
 }
-?>

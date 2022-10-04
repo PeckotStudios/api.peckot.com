@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/.lib/API.php';
+require __DIR__ . '/.lib/API.php';
 
 use Pectics\API;
 
@@ -14,5 +14,6 @@ print_r(json_encode(
         'Error! Please select the correct API.',
         'Refer to docs.peckot.com to learn more.',
         array()
-    ), JSON_NUMERIC_CHECK|JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES
+    ),
+    JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
 ));
