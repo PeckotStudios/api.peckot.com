@@ -1,5 +1,4 @@
-module.exports = new Promise((req, res) => {
-
+module.exports = (req, res) => {
     const {
         area = 'cn',        // 壁纸地域 iso2
         type = 'json',      // 返回格式 json image
@@ -16,21 +15,12 @@ module.exports = new Promise((req, res) => {
     date = date <= 0 ? 0 : date;
     numb = numb <= 1 ? 1 : numb >= 8 ? 8 : numb;
 
-    ajax({
-        type: "GET",
-        url: url,
-        data: {
-            cc: area,
-            format: 'js',
-            idx: date,
-            n: numb,
-        },
-        success: function (data) {
-            res.send(data);
-        }
+    axios.get(url + '?cc=' + area + '&format=js&idx=' + date + '&n=' + numb).then(response => {
+        console.log(response.data);
+        res.send(response.data);
+    }).catch(error => {
+        res.send("err");
+        console.log(error);
     });
-
-    res.send(`Hello ${area}!`);
-}).catch((error) => {
-    console.error(error);
-});
+    res.send(`\n\n\nHello ${area}!`);
+}
