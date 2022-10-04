@@ -1,22 +1,22 @@
 <?php
 
-$cfg = realpath('./config.json');
-$config = json_decode(file_get_contents($cfg), true);
-if (date('ymdHis') - $config['updatetime'] > 60*30) {
-    $path = realpath('../storage/textures');
-    $date = date('Y/m/d H:i:s');
-    chdir($path);
-    foreach (glob('*') as $v) {
-        if ($v == 'pngs') continue;
-        copy($path.DIRECTORY_SEPARATOR.$v, $path.DIRECTORY_SEPARATOR.'../../storage/textures/pngs/'.$v.'.png');
-    }
-    chdir('pngs');
-    shell_exec('git add .');
-    shell_exec("git commit -m \"Auto updation at $date\"");
-    shell_exec('git push github main');
-    $config['updatetime'] = (int)date('ymdHis');
-    file_put_contents($cfg, json_encode($config, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-}
+// $cfg = realpath('./config.json');
+// $config = json_decode(file_get_contents($cfg), true);
+// if (date('ymdHis') - $config['updatetime'] > 60*30) {
+//     $path = realpath('../storage/textures');
+//     $date = date('Y/m/d H:i:s');
+//     chdir($path);
+//     foreach (glob('*') as $v) {
+//         if ($v == 'pngs') continue;
+//         copy($path.DIRECTORY_SEPARATOR.$v, $path.DIRECTORY_SEPARATOR.'../../storage/textures/pngs/'.$v.'.png');
+//     }
+//     chdir('pngs');
+//     shell_exec('git add .');
+//     shell_exec("git commit -m \"Auto updation at $date\"");
+//     shell_exec('git push github main');
+//     $config['updatetime'] = (int)date('ymdHis');
+//     file_put_contents($cfg, json_encode($config, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+// }
 
 define('LARAVEL_START', microtime(true));
 
