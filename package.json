@@ -1,6 +1,6 @@
 {
   "name": "api.peckot.com",
-  "repository": "https://github.com/vercel/examples.git",
+  "repository": "https://github.com/Peckot-Studios/api.peckot.com",
   "license": "MIT",
   "private": true,
   "devDependencies": {

@@ -22,29 +22,26 @@ module.exports = (req, res) => {
 
     // Main process
     axios.get(_url + '/HPImageArchive.aspx?cc=' + _area + '&format=js&idx=' + _dateback + '&n=' + _num).then(response => {
-        res.send(new String(response.data));
-        return;
-        const data = JSON.parse('' + response.data);
         if (_type == 'image') {
-            res.setHeader('Content-Type', 'image/png')
-                .redirect(200, _url + new String(data.images[0].url).replace('1920x1080', _size));
+            res.status(200).setHeader('Content-Type', 'image/png')
+                .redirect(_url + new String(response.data.images[0].url).replace('1920x1080', _size));
             return;
         } else {
-            var _data = new Array();
-            for (const image in data.images) {
-                _data.push({
+            var _images = new Array();
+            response.data.images.forEach(image => {
+                _images.push({
                     date: image.enddate,
                     url: _url + new String(image.url).replace('1920x1080', _size),
                     copyright: image.copyright,
                     copyrightlink: image.copyrightlink,
                     hashcode: image.hsh,
                 });
-            }
+            });
             res.status(200).setHeader('Content-Type', 'application/json')
                 .send(JSON.stringify({
                     code: 200,
                     message: 'Data request succeeded!',
-                    data: _data,
+                    data: { images: _images },
                 }, null, 4));
             return;
         }
