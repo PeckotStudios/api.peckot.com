@@ -37,18 +37,18 @@ module.exports = (req, res) => {
                     hashcode: image.hsh,
                 });
             }
-            res.jsonp({
+            res.send(JSON.stringify({
                 code: 200,
                 message: 'Data request succeeded!',
                 data: _data,
-            });
+            }, null, 4));
             return;
         }
     }).catch(error => {
-        res.jsonp({
+        res.send(JSON.stringify({
             code: 400,
             message: 'Data request failed! Error: ' + error,
             advice: 'Confirm whether your parameters are correct.',
-        });
+        }, null, 4));
     });
 }
