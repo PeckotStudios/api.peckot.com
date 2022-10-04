@@ -1,5 +1,6 @@
 module.exports = (req, res) => {
     // Dependencies
+    const api = require('./API')(res);
     const axios = require('axios');
 
     // Input arguments
@@ -21,7 +22,7 @@ module.exports = (req, res) => {
     var _num = num <= 1 ? 1 : num >= 8 ? 8 : num;
 
     // Main process
-    axios.get(_url + '/HPImageArchive.aspx?cc=' + _area + '&format=js&idx=' + _dateback + '&n=' + _num).then(response => {
+    axios.get(`${_url}/HPImageArchive.aspx?cc=${_area}&format=js&idx=${_dateback}&n=${_num}`).then(response => {
         if (_type == 'image') {
             res.status(200).setHeader('Content-Type', 'image/png')
                 .redirect(_url + new String(response.data.images[0].url).replace('1920x1080', _size));
@@ -37,20 +38,12 @@ module.exports = (req, res) => {
                     hashcode: image.hsh,
                 });
             });
-            res.status(200).setHeader('Content-Type', 'application/json')
-                .send(JSON.stringify({
-                    code: 200,
-                    message: 'Data request succeeded!',
-                    data: { images: _images },
-                }, null, 4));
+            api.info(200, 'Data request succeeded!', { images: _images });
             return;
         }
     }).catch(error => {
-        res.status(400).setHeader('Content-Type', 'application/json')
-            .send(JSON.stringify({
-                code: 400,
-                message: 'Data request failed! ' + error,
-                advice: 'Confirm whether your parameters are correct.',
-            }, null, 4));
+        api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
+        return;
     });
+
 }
