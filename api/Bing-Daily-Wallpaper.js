@@ -1,5 +1,5 @@
 module.exports = (req, res) => {
-    const {
+    var {
         area = 'cn',        // 壁纸地域 iso2
         type = 'json',      // 返回格式 json image
         node = 'default',   // 获取节点 default interl
