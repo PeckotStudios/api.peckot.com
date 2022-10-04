@@ -1,0 +1,1 @@
+!function(e){"use strict";var t;null===(t=document.querySelector("#update-uuid"))||void 0===t||t.addEventListener("click",async()=>{const{code:t,message:s}=await e.fetch.post("/mojang/update-uuid"),{toast:c}=e.notify;0===t?c.success(s):c.error(s)})}(blessing);

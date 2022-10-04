@@ -1,0 +1,20 @@
+title: 正版绑定
+description: |
+  如果您拥有正版 Minecraft 账号，可点击下面的按钮进行验证并绑定。
+
+  如果验证成功，您将获得正版账号对应的角色，并可获得 :score 积分。
+verify: 验证
+failed:
+  rate: 操作过于频繁，请稍后再试。
+  not-purchased: 验证游戏所有权失败。
+  other: 验证失败，可能是无法连接 Mojang 服务器。
+
+notification:
+  title: 角色属主更改通知
+  content: |
+    尊敬的 :nickname：
+
+    我们很抱歉地告诉您，您的角色 :player 已被转让给一个正版用户。
+    为此，我们向您补偿了 :score 积分。
+
+    由此带来的不便，敬请谅解。

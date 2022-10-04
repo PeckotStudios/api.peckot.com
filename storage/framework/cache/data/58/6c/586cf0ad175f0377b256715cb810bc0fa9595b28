@@ -1,0 +1,1 @@
+9999999999a:2:{s:12:"content-type";s:49:"请求的 Content-Type 必须为 application/json";s:8:"throttle";s:46:"请求过于频繁，请等待 :s 秒后重试";}
