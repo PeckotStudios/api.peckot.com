@@ -22,7 +22,7 @@ module.exports = (req, res) => {
 
     // Main process
     axios.get(_url + '/HPImageArchive.aspx?cc=' + _area + '&format=js&idx=' + _dateback + '&n=' + _num).then(response => {
-        const data = JSON.parse(response.data);
+        const data = JSON.parse(new String(response.data));
         if (_type == 'image') {
             res.type('png').location(_url + (data.images[0].url).replace('1920x1080', _size));
             return;
@@ -47,7 +47,7 @@ module.exports = (req, res) => {
     }).catch(error => {
         res.send(JSON.stringify({
             code: 400,
-            message: 'Data request failed! Error: ' + error,
+            message: 'Data request failed! ' + error,
             advice: 'Confirm whether your parameters are correct.',
         }, null, 4));
     });
