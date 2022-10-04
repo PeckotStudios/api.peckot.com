@@ -1,5 +1,6 @@
-module.exports = (req, res) => {
-    const { 
+module.exports = new Promise((req, res) => {
+
+    const {
         area = 'cn',        // 壁纸地域 iso2
         type = 'json',      // 返回格式 json image
         node = 'default',   // 获取节点 default interl
@@ -24,10 +25,12 @@ module.exports = (req, res) => {
             idx: date,
             n: numb,
         },
-        success: function(data){
+        success: function (data) {
             res.send(data);
         }
     });
 
     res.send(`Hello ${area}!`);
-}  
+}).catch((error) => {
+    console.error(error);
+});
