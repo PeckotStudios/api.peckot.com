@@ -16,7 +16,7 @@ module.exports = (req, res) => {
     date = date <= 0 ? 0 : date;
     numb = numb <= 1 ? 1 : numb >= 8 ? 8 : numb;
 
-    axios.get(url + '?cc=' + area + '&format=js&idx=' + date + '&n=' + numb).then((response, res) => {
+    axios.get(url + '?cc=' + area + '&format=js&idx=' + date + '&n=' + numb).then(response => {
         console.log(response.data);
         res.send(response.data);
     }).catch(error => {
