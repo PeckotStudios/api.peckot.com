@@ -1,3 +1,0 @@
-9999999999a:8:{s:15:"generate-config";s:12:"配置生成";s:15:"mod-requirement";s:10:"Mod 需求";s:9:"mod-intro";s:33:"本站支持以下加载方式：";s:6:"legacy";s:18:"传统加载方式";s:7:"version";s:6:"版本";s:11:"config-file";s:12:"配置文件";s:16:"extra-list-intro";s:482:"ExtraList 是 CustomSkinLoader（14.4 以上版本）提供的快捷添加皮肤站功能。不需要任何繁琐的配置修改，您只需要下载下面提供的 ExtraList 文件，放入 <code>.minecraft/CustomSkinLoader/ExtraList</code> 目录下并重启游戏即可。
-<br>在安装完成第一次启动游戏并成功载入 CustomSkinLoader 后 ExtraList 文件会被自动删除，这是正常现象。此时 :site 已被添加至 CustomSkinLoader 加载列表的顶部。
-";s:19:"extra-list-download";s:29:"点击下载 ExtraList 文件";}

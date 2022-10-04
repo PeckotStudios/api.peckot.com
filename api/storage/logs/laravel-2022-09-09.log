@@ -1,4 +1,0 @@
-[2022-09-09 03:43:29] production.ERROR: Allowed memory size of 134217728 bytes exhausted (tried to allocate 17702881 bytes) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Allowed memory size of 134217728 bytes exhausted (tried to allocate 17702881 bytes) at /www/wwwroot/mc.peckot.com/vendor/blessing/texture-renderer/src/Blessing/Renderer/ImageUtil.php:21)
-[stacktrace]
-#0 {main}
-"} 
