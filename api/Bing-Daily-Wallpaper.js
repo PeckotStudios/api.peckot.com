@@ -22,7 +22,7 @@ module.exports = (req, res) => {
 
     // Main process
     axios.get(_url + '/HPImageArchive.aspx?cc=' + _area + '&format=js&idx=' + _dateback + '&n=' + _num).then(response => {
-        res.send(response.data);
+        res.send(new String(response.data));
         return;
         const data = JSON.parse('' + response.data);
         if (_type == 'image') {
