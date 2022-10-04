@@ -15,7 +15,7 @@ module.exports = (req, res) => {
     date = date <= 0 ? 0 : date;
     numb = numb <= 1 ? 1 : numb >= 8 ? 8 : numb;
 
-    $.ajax({
+    ajax({
         type: "GET",
         url: url,
         data: {
@@ -29,5 +29,5 @@ module.exports = (req, res) => {
         }
     });
 
-    //res.send(`Hello ${name}!`)
+    res.send(`Hello ${area}!`);
 }  
