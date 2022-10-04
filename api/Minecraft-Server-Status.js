@@ -1,6 +1,6 @@
 module.exports = (req, res) => {
     // Dependencies
-    const api = require('./API')(res);
+    const api = require('../.lib/API')(res);
     const { MinecraftServerListPing, MinecraftQuery } = require("minecraft-status");
 
     // Input arguments
