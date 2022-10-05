@@ -1,3 +1,32 @@
+/**
+ * Get api: Bing daily wallpapers
+ * Request: <Type> (Required) [Optional = {DefaultValue}]
+ *   <string>  [area = 'cn']        - from where to get wallpapers
+ *   <string>  [type = 'json']      - feedback format, json and image allowed
+ *   <string>  [node = 'default']   - whether to use www.bing.com or cn.bing.com
+ *   <string>  [size = '1920x1080'] - size of wallpapers, 1920x1080 1920x1200 1366x768 etc. allowed
+ *   <integer> [dateback = 0]       - how many days back to start getting wallpapers
+ *   <integer> [num = 1]            - how many wallpapers you want to get
+ * Response: <Type> [Key] {Condition}
+ *   <integer> [code]    {None}     - web status code
+ *   <string>  [message] {None}     - intro messages
+ *   <string>  [advice]  {Fail}     - error debug advice
+ *   <object>  [data]    {Seccess}  - response data
+ * Data Structure:
+ *   images: [
+ *       {
+ *           date: '{ImageDate:yyyymmdd}',
+ *           url: '{ImageDirectLink}',
+ *           copyright: '{ImageFrom}',
+ *           copyrightlink: '{ImageFromLink}',
+ *           hashcode: '{ImageHash}'
+ *       },
+ *       {more...}
+ *   ]
+ * @author Pectics
+ * @param {*} req 
+ * @param {*} res 
+ */
 module.exports = (req, res) => {
     // Dependencies
     const api = require('../.lib/API')(res);
