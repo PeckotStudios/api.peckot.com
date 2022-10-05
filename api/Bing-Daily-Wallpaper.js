@@ -25,14 +25,14 @@ module.exports = (req, res) => {
     axios.get(`${_url}/HPImageArchive.aspx?cc=${_area}&format=js&idx=${_dateback}&n=${_num}`).then(response => {
         if (_type == 'image') {
             res.status(200).setHeader('Content-Type', 'image/png')
-                .redirect(_url + new String(response.data.images[0].url).replace('1920x1080', _size));
+                .redirect(_url + new String(response.data.images[0].url).replace(/1920x1080/g, _size));
             return;
         } else {
             var _images = new Array();
             response.data.images.forEach(image => {
                 _images.push({
                     date: image.enddate,
-                    url: _url + new String(image.url).replace('1920x1080', _size),
+                    url: _url + new String(image.url).replace(/1920x1080/g, _size),
                     copyright: image.copyright,
                     copyrightlink: image.copyrightlink,
                     hashcode: image.hsh,
