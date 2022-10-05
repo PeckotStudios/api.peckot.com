@@ -1,5 +1,6 @@
 /**
  * Get api: Bing daily wallpapers
+ * Description: Refer to docs.peckot.com for more.
  * Request: <Type> (Required) [Optional = {DefaultValue}]
  *   <string>  [area = 'cn']        - from where to get wallpapers
  *   <string>  [type = 'json']      - feedback format, json and image allowed
