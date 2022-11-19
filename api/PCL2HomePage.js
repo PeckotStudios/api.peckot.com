@@ -8,8 +8,8 @@ module.exports = (req, res) => {
     // Preprocess
     var updatetime, config;
     try {
-        updatetime = JSON.parse(fs.readFileSync(__dirname + '/updatetime.json', 'utf-8'));
-        config = JSON.parse(fs.readFileSync(`${__dirname}/../PCL2HomePage/config.json`, 'utf-8'));
+        updatetime = JSON.parse(fs.readFileSync('updatetime.json', 'utf-8'));
+        config = JSON.parse(fs.readFileSync('../PCL2HomePage/config.json', 'utf-8'));
     } catch (error) {
         api.error(400, `File request failed! ${error}`, 'Confirm whether the preprocess file is available.');
         return;
@@ -26,7 +26,7 @@ module.exports = (req, res) => {
     // Get source file
     var source = new String();
     try {
-        source += fs.readFileSync(`${__dirname}/../PCL2HomePage/source.xaml`, 'utf-8');
+        source += fs.readFileSync(`../PCL2HomePage/source.xaml`, 'utf-8');
     } catch (error) {
         api.error(400, `Source file request failed! ${error}`, 'Confirm whether the source file is available.');
         return;
@@ -55,7 +55,7 @@ module.exports = (req, res) => {
     console.log(source);
 
     try {
-        fs.writeFileSync(`/PCL2HomePage/peckot.xaml`, source);
+        fs.writeFileSync(`../PCL2HomePage/peckot.xaml`, source);
     } catch (error) {
         api.error(400, `File request failed! ${error}`, 'Confirm whether the destination file is available.');
         return;
