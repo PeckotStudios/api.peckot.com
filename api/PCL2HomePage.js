@@ -55,6 +55,7 @@ module.exports = (req, res) => {
                 });
                 return playerlist;
             }));
+            res.status(200).setHeader('Content-Type', 'application/json').send(source);
         })
         .catch(error => {
             source = source.replace(/\$\(status\)/, '离线');
@@ -62,7 +63,7 @@ module.exports = (req, res) => {
             source = source.replace(/\$\(max\)/, 'NaN');
             source = source.replace(/\$\(playerlist\)/, '无数据');
             res.send(error);
+            res.status(200).setHeader('Content-Type', 'application/json').send(source);
         });
-    res.status(200).setHeader('Content-Type', 'application/json').send(source);
 
 }
