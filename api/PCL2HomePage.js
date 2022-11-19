@@ -53,16 +53,7 @@ module.exports = (req, res) => {
     });
     source = source.replace('(broadcast)', '当前没有公告');
 
-    console.log(source);
-
-    try {
-        fs.writeFileSync(`${__dirname}/../public/PCL2HomePage/peckot.xaml`, source);
-    } catch (error) {
-        api.error(400, `File request failed! ${error}`, 'Confirm whether the destination file is available.');
-        return;
-    }
-
     res.status(200).setHeader('Content-Type', 'application/json')
-        .redirect('/PCL2HomePage/peckot.xaml');
+        .send(JSON.stringify(source, null, 4));
 
 }
