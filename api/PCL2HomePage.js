@@ -33,14 +33,14 @@ module.exports = (req, res) => {
     }
 
     // Placeholders replacement
-    for (let i = 1; i < 4; i++) {
-        axios.get('https://v1.hitokoto.cn').then(({ response }) => {
-            source = source.replace(/\$\(hitokoto\)/, response.hitokoto);
-        }).catch(error => {
-            api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
-            return;
-        });    
-    }
+    // for (let i = 1; i < 4; i++) {
+    //     axios.get('https://v1.hitokoto.cn').then(({ response }) => {
+    //         source = source.replace(/\$\(hitokoto\)/, response.hitokoto);
+    //     }).catch(error => {
+    //         api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
+    //         return;
+    //     });    
+    // }
     source = source.replace(/\$\(broadcast\)/, '当前没有公告');
     MinecraftServerListPing.ping(4, config.server.host, config.server.port, 3000)
     .then(response => {
