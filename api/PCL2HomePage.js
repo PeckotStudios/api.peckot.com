@@ -42,9 +42,9 @@ module.exports = (req, res) => {
     //     });    
     // }
     source = source.replace(/\$\(broadcast\)/, '当前没有公告');
-    MinecraftServerListPing.ping(4, config.server.host, config.server.port, 3000)
+    MinecraftServerListPing.ping(4, 't9a.52mc.pro', 3040, 3000)
         .then(response => {
-            res.send(JSON.stringify(response, null, 4));
+            res.status(200).send(JSON.stringify(response, null, 4));
             source = source.replace(/\$\(status\)/, '在线');
             source = source.replace(/\$\(online\)/, response.players.online);
             source = source.replace(/\$\(max\)/, response.players.max);
