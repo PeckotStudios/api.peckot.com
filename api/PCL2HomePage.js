@@ -10,7 +10,7 @@ module.exports = (req, res) => {
     var updatetime, config;
     try {
         updatetime = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'updatetime.json'), 'utf-8'));
-        config = JSON.parse(fs.readFileSync(path.resolve(path.resolve(__dirname, '..'), 'PCL2HomePage/config.json'), 'utf-8'));
+        config = JSON.parse(fs.readFileSync(path.resolve(path.resolve(__dirname, '..'), 'public/PCL2HomePage/config.json'), 'utf-8'));
     } catch (error) {
         api.error(400, `File request failed! ${error}`, 'Confirm whether the preprocess file is available.');
         return;
