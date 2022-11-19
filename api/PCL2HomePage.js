@@ -62,7 +62,7 @@ module.exports = (req, res) => {
     source = source.replace('(broadcast)', '当前没有公告');
 
     try {
-        const data = fs.writeFileSync(`${__dirname}/../PCL2HomePage/peckot.xaml`, source);
+        fs.writeFileSync(`/var/task/PCL2HomePage/peckot.xaml`, source);
     } catch (error) {
         api.error(400, `File request failed! ${error}`, 'Confirm whether the destination file is available.');
         return;
