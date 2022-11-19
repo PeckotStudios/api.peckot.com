@@ -1,0 +1,152 @@
+<StackPanel Margin="0,-10,0,0" Opacity="{Binding Path=Value,ElementName=OpacitySlider}">
+
+	<!--Animations Starts-->
+	<StackPanel.Triggers>
+		<EventTrigger RoutedEvent="StackPanel.Loaded">
+			<BeginStoryboard>
+				<Storyboard Name="BannerAnimation" RepeatBehavior="Forever">
+					<ColorAnimation Storyboard.TargetName="Hint1" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" From="#FF000000" To="#FF000000" Duration="0:0:0" />
+					<ColorAnimation BeginTime="0:0:5" Storyboard.TargetName="Hint1" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" From="#FF000000" To="#00000000" Duration="0:0:1" />
+					<ColorAnimation BeginTime="0:0:21" Storyboard.TargetName="Hint1" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" From="#00000000" To="#FF000000" Duration="0:0:1" />
+					<ColorAnimation Storyboard.TargetName="Hint2" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" From="#00000000" To="#00000000" Duration="0:0:0" />
+					<ColorAnimation BeginTime="0:0:6" Storyboard.TargetName="Hint2" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" From="#00000000" To="#FF000000" Duration="0:0:1" />
+					<ColorAnimation BeginTime="0:0:12" Storyboard.TargetName="Hint2" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" From="#FF000000" To="#00000000" Duration="0:0:1" />
+					<ColorAnimation Storyboard.TargetName="Hint3" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" From="#00000000" To="#00000000" Duration="0:0:0" />
+					<ColorAnimation BeginTime="0:0:13" Storyboard.TargetName="Hint3" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" From="#00000000" To="#FF000000" Duration="0:0:1" />
+					<ColorAnimation BeginTime="0:0:20" Storyboard.TargetName="Hint3" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" From="#FF000000" To="#00000000" Duration="0:0:1" />
+				</Storyboard>
+			</BeginStoryboard>
+		</EventTrigger>
+	</StackPanel.Triggers>
+	<!--Animations Ends-->
+
+	<!--Hints Starts-->
+	<Border Margin="0,0,0,10" Padding="2,8" BorderThickness="1" Background="{DynamicResource ColorBrush5}" CornerRadius="5" VerticalAlignment="Top" BorderBrush="{DynamicResource ColorBrush3}" Opacity="0.7">
+		<Grid Margin="10,0,0,0">
+			<TextBlock Name="Hint1" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Foreground="#FF000000">
+					📰 文字文字文字文字文字文字文字文字文字字文字文字文字文字文字字文字文字文字文字文字字文字文字文字文字文字字文字文字文字文字文字
+			</TextBlock>
+			<TextBlock Name="Hint2" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Foreground="#00000000">
+					📰 文字文字文字文字文字文字文字文字文字字文字文字文字文字文字字文字文字文字文字文字字文字文字文字文字文字字文字文字文字文字文字
+			</TextBlock>
+			<TextBlock Name="Hint3" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Foreground="#00000000">
+					📰 文字文字文字文字文字文字文字文字文字字文字文字文字文字文字字文字文字文字文字文字字文字文字文字文字文字字文字文字文字文字文字
+			</TextBlock>
+		</Grid>
+	</Border>
+	<!--Hints Ends-->
+
+	<!--Grid for Info and BC-->
+	<Grid Margin="0,0,0,0">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="3*"></ColumnDefinition>
+			<ColumnDefinition Width="2*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<local:MyCard Margin="0,0,7.5,15" Title="📢 服务器公告" Grid.Column="0">
+			<StackPanel Margin="20,35,20,10">
+				<TextBlock Text="
+					公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告
+					公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告
+					公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告
+				" Margin="0,0,0,5" TextWrapping="Wrap" />
+			</StackPanel>
+		</local:MyCard>
+		<local:MyCard Margin="7.5,0,0,15" Title="📢 服务器信息" Grid.Column="1">
+				<local:MyButton Margin="0,10,10,0" Width="34" Height="17" HorizontalAlignment="Right" VerticalAlignment="Top"
+						Text="刷新" EventType="刷新主页" ToolTip="上次更新时间："/>
+				<StackPanel Margin="20,35,20,10" Grid.Row="1">
+					<TextBlock Text="当前状态：" Margin="0,0,0,5" />
+					<TextBlock Text="在线人数：" Margin="0,0,0,5" />
+					<TextBlock Text="玩家列表：" Margin="0,0,0,5" />
+				</StackPanel>
+		</local:MyCard>
+	</Grid>
+
+	<!--Tmp News-->
+	<Grid Margin="0,0,0,15">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*"></ColumnDefinition>
+			<ColumnDefinition Width="100"></ColumnDefinition>
+			<ColumnDefinition Width="1*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<Line X1="0" X2="100" Stroke="{DynamicResource ColorBrush5}" StrokeThickness="1.5" HorizontalAlignment="Center" Stretch="Fill" Grid.Column="0" />
+		<TextBlock Text="无  关  紧  要" HorizontalAlignment="Center" FontSize="14" Foreground="{DynamicResource ColorBrush4}" Grid.Column="1" VerticalAlignment="Center" />
+		<Line X1="0" X2="100" Stroke="{DynamicResource ColorBrush5}" StrokeThickness="1.5" HorizontalAlignment="Center" Stretch="Fill" Grid.Column="2" />
+	</Grid>
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="240"></ColumnDefinition>
+			<ColumnDefinition Width="1*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<Grid Grid.Column="0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="1*"></RowDefinition>
+				<RowDefinition Height="240"></RowDefinition>
+			</Grid.RowDefinitions>
+			<local:MyCard Margin="0,0,7.5,15" Title="快捷菜单" Grid.Row="0">
+				<StackPanel Margin="20,35,20,10">
+					<local:MyButton EventType="复制文本" EventData="awa"></local:MyButton>
+					<local:MyButton EventType="复制文本" EventData="awa"></local:MyButton>
+					<local:MyButton EventType="复制文本" EventData="awa"></local:MyButton>
+				</StackPanel>
+			</local:MyCard>
+			<local:MyCard Margin="0,0,7.5,15" Title="日历" Grid.Row="1">
+				<Calendar  HorizontalAlignment="Left" Margin="20,35,20,20" />
+			</local:MyCard>
+		</Grid>
+		<Grid Grid.Column="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="280"></RowDefinition>
+				<RowDefinition Height="1*"></RowDefinition>
+			</Grid.RowDefinitions>
+			<local:MyCard Margin="7.5,0,0,15" Title="毕加索专区" Grid.Row="0">
+				<InkCanvas EditingMode="InkAndGesture" HorizontalAlignment="Center" Margin="15,35,15,15"
+					Width="4096" MaxHeight="280" Height="4096" Background="{DynamicResource ColorBrush6}">
+				</InkCanvas>
+			</local:MyCard>
+			<local:MyCard Margin="7.5,0,0,15" Title="卡片" Grid.Row="1">
+				<StackPanel Margin="20,35,20,10">
+					<TextBlock Text="文本文本文本文本" Margin="0,0,0,5" />
+				</StackPanel>
+			</local:MyCard>
+		</Grid>
+	</Grid>
+
+	<local:MyCard Margin="0,0,0,15" Title="卡片" Grid.Column="1">
+		<StackPanel Margin="20,35,20,10">
+			<TextBlock Text="文本文本文本文本" Margin="0,0,0,5" />
+		</StackPanel>
+	</local:MyCard>
+
+</StackPanel>
+
+<Border Background="#CCFFFFFF" Height="140" Margin="-25,30,-25,-10" BorderThickness="0,2,0,0" BorderBrush="#AAAAAAAA">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*"></ColumnDefinition>
+			<ColumnDefinition Width="1*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<StackPanel Margin="40,15,0,10" Grid.Column="0">
+			<TextBlock Text="PCL2 × Peckot" FontSize="16" Margin="0,5,5,5" />
+			<TextBlock Text="Powered by Pectics" />
+	
+			<StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+				<TextBlock Text="官方网站：" />
+				<local:MyTextButton Text="https://www.peckot.com" EventType="打开网页" EventData="https://www.peckot.com" ToolTip="点击打开PeckotStudios官网" />
+			</StackPanel>
+	
+			<StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+				<TextBlock Text="PecticsのBlog：" />
+				<local:MyTextButton Text="https://pectics.peckot.com" EventType="打开网页" EventData="https://pectics.peckot.com" ToolTip="点击打开PecticsのBlog" />
+			</StackPanel>
+	
+			<StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+				<TextBlock Text="Github：" />
+				<local:MyTextButton Text="https://github.com/Pectics" EventType="打开网页" EventData="https://github.com/Pectics" ToolTip="点击打开Github" />
+			</StackPanel>
+		</StackPanel>
+		<Image Width="100" Height="100" HorizontalAlignment="Center" Source="https://z3.ax1x.com/2021/11/28/onSdr6.png" Grid.Column="1" />
+		<local:MyLoading Height="10" HorizontalAlignment="Center" Foreground="{DynamicResource ColorBrush1}" Grid.Column="1" />
+	</Grid>
+</Border>
