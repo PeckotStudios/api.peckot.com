@@ -32,12 +32,12 @@ module.exports = (req, res) => {
     })();
     if (isLimited()) {
         res.status(200).setHeader('Content-Type', 'application/json')
-                .redirect('/public/PCL2HomePage/Custom.xaml');
+                .redirect('/PCL2HomePage/Custom.xaml');
     } 
 
     // Read source file
     try {
-        source = fs.readFileSync('../public/PCL2HomePage/source.xaml', 'utf8');
+        source = fs.readFileSync('../PCL2HomePage/source.xaml', 'utf8');
     } catch (error) {
         api.error(400, `Source file request failed! ${error}`, 'Confirm whether the source file is available.');
         return;
