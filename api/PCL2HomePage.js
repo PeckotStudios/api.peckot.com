@@ -31,7 +31,7 @@ module.exports = (req, res) => {
         return;
     }
 
-    // Get source file and server data
+    // Get source file
     var source = (() => {
         try {
             return fs.readFileSync(`${__dirname}/../PCL2HomePage/source.xaml`, 'utf-8');
@@ -39,14 +39,6 @@ module.exports = (req, res) => {
             api.error(400, `Source file request failed! ${error}`, 'Confirm whether the source file is available.');
             return '';
         }
-    });
-    var serverdata;
-    MinecraftServerListPing.ping(4, host, port, 3000)
-    .then(response => {
-        serverdata = response;
-    })
-    .catch(error => {
-        api.error(400, `Data request failed! ${error}`, 'Confirm whether the server is online.');
     });
 
     // Placeholders replacement
