@@ -61,8 +61,17 @@ module.exports = (req, res) => {
     });
     source = source.replace('(broadcast)', '当前没有公告');
 
+    console.log(source);
+
+    fs.writeFile('/Users/joe/test.txt', content, err => {
+        if (err) {
+          console.error(err)
+          return
+        }
+        //文件写入成功。
+      })
     try {
-        fs.writeFileSync(`/var/task/PCL2HomePage/peckot.xaml`, source);
+        fs.writeFileSync(`/PCL2HomePage/peckot.xaml`, source);
     } catch (error) {
         api.error(400, `File request failed! ${error}`, 'Confirm whether the destination file is available.');
         return;
