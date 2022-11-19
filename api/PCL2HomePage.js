@@ -4,12 +4,13 @@ module.exports = (req, res) => {
     const { MinecraftServerListPing } = require("minecraft-status");
     const axios = require('axios');
     const fs = require('fs');
+    const path = require('path');
 
     // Preprocess
     var updatetime, config;
     try {
-        updatetime = JSON.parse(fs.readFileSync(__dirname+'/updatetime.json', 'utf-8'));
-        config = JSON.parse(fs.readFileSync('../PCL2HomePage/config.json', 'utf-8'));
+        updatetime = JSON.parse(fs.readFileSync(path.resolve(__dirname, '/updatetime.json'), 'utf-8'));
+        config = JSON.parse(fs.readFileSync(path.resolve(path.resolve(__dirname, '..'), 'PCL2HomePage/config.json'), 'utf-8'));
     } catch (error) {
         api.error(400, `File request failed! ${error}`, 'Confirm whether the preprocess file is available.');
         return;
