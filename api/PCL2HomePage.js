@@ -62,7 +62,7 @@ module.exports = (req, res) => {
             source = source.replace(/\$\(online\)/, 'NaN');
             source = source.replace(/\$\(max\)/, 'NaN');
             source = source.replace(/\$\(playerlist\)/, '无数据');
-            res.status(200).setHeader('Content-Type', 'application/json').send(source);
+            res.status(200).send(source);
         });
 
 }
