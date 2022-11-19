@@ -1,7 +1,7 @@
 module.exports = (req, res) => {
     // Dependencies
     const api = require('../.lib/API')(res);
-    const MinecraftServerListPing = require("minecraft-status");
+    const { MinecraftServerListPing } = require("minecraft-status");
     const axios = require('axios');
     const fs = require('fs');
 
