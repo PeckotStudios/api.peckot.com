@@ -31,32 +31,20 @@ module.exports = (req, res) => {
         return;
     }
 
-    async function get(a, b, c) {
-        await axios.get(a).then(b).catch(c);
-    }
-
     // Placeholders replacement
     for (let i = 1; i < 4; i++) {
-        get('https://v1.hitokoto.cn', 
-        response => {
-            source = source.replace('(hitokoto' + i + ')', response.hitokoto);
-        },
-        error => {
+        axios.get('https://v1.hitokoto.cn').then(response => {
+            source = source.replace(/\$hitokoto/, response.hitokoto);
+        }).catch(error => {
             api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
             return;
-        });
-        // axios.get('https://v1.hitokoto.cn').then(response => {
-        //     source = source.replace('(hitokoto' + i + ')', response.hitokoto);
-        // }).catch(error => {
-        //     api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
-        //     return;
-        // });    
+        });    
     }
     axios.get(`https://api.peckot.com/api/MinecraftServerStatus/?host=${config.server.host}&port=${config.server.port}`).then(response => {
-        source = source.replace('(status)', response.code == 200 ? '在线' : '离线' );
-        source = source.replace('(online)', response.data.players.online);
-        source = source.replace('(max)', response.data.players.max);
-        source = source.replace('(playerlist)', (() => {
+        source = source.replace(/\$\(status\)/, response.code == 200 ? '在线' : '离线' );
+        source = source.replace(/\$\(online\)/, response.data.players.online);
+        source = source.replace(/\$\(max\)/, response.data.players.max);
+        source = source.replace(/\$\(playerlist\)/, (() => {
             var playerlist = '';
             response.data.players.sample.forEach(player => {
                 playerlist += `${player.name}，`;
@@ -67,7 +55,7 @@ module.exports = (req, res) => {
         api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
         return;
     });
-    source = source.replace('(broadcast)', '当前没有公告');
+    source = source.replace(/\$\(broadcast\)/, '当前没有公告');
 
     res.status(200).send(source);
 
