@@ -41,7 +41,7 @@ module.exports = (req, res) => {
         }
     });
     var serverdata;
-    MinecraftServerListPing.ping(protocol, host, port, 3000)
+    MinecraftServerListPing.ping(4, host, port, 3000)
     .then(response => {
         serverdata = response;
     })
