@@ -1,6 +1,7 @@
 module.exports = (req, res) => {
     // Dependencies
     const api = require('../.lib/API')(res);
+    const { MinecraftServerListPing } = require("minecraft-status");
     const axios = require('axios');
     const fs = require('fs');
 
@@ -32,31 +33,34 @@ module.exports = (req, res) => {
     }
 
     // Placeholders replacement
-    for (let i = 1; i < 4; i++) {
-        axios.get('https://v1.hitokoto.cn').then(response => {
-            source = source.replace('(hitokoto' + i + ')', response.hitokoto);
-        }).catch(error => {
-            api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
-            return;
-        });    
-    }
-    axios.get(`https://api.peckot.com/api/MinecraftServerStatus/?host=${config.server.host}&port=${config.server.port}`).then(response => {
-        source = source.replace('(status)', response.code == 200 ? '在线' : '离线' );
-        source = source.replace('(online)', response.data.players.online);
-        source = source.replace('(max)', response.data.players.max);
-        source = source.replace('(playerlist)', (() => {
+    // for (let i = 1; i < 4; i++) {
+    //     axios.get('https://v1.hitokoto.cn').then(({ response }) => {
+    //         source = source.replace(/\$\(hitokoto\)/, response.hitokoto);
+    //     }).catch(error => {
+    //         api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
+    //         return;
+    //     });    
+    // }
+    source = source.replace(/\$\(broadcast\)/, '当前没有公告');
+    MinecraftServerListPing.ping(4, config.server.host, config.server.port, 3000)
+    .then(response => {
+        source = source.replace(/\$\(status\)/, '在线');
+        source = source.replace(/\$\(online\)/, response.players.online);
+        source = source.replace(/\$\(max\)/, response.players.max);
+        source = source.replace(/\$\(playerlist\)/, (() => {
             var playerlist = '';
-            response.data.players.sample.forEach(player => {
+            response.players.sample.forEach(player => {
                 playerlist += `${player.name}，`;
             });
             return playerlist;
         }));
-    }).catch(error => {
-        api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
-        return;
+    })
+    .catch(error => {
+        source = source.replace(/\$\(status\)/, '离线');
+        source = source.replace(/\$\(online\)/, 'NaN');
+        source = source.replace(/\$\(max\)/, 'NaN');
+        source = source.replace(/\$\(playerlist\)/, '无数据');
     });
-    source = source.replace('(broadcast)', '当前没有公告');
-
-    res.status(200).send(source);
+    res.status(200).setHeader('Content-Type', 'application/json').send(source);
 
 }
