@@ -41,7 +41,7 @@ module.exports = (req, res) => {
     //         return;
     //     });    
     // }
-    source = source.replace(/\$\(broadcast\)/, '当前没有公告' + config);
+    source = source.replace(/\$\(broadcast\)/, '当前没有公告' + config + config.server.host);
     MinecraftServerListPing.ping(4, config.server.host, config.server.port, 3000)
     .then(response => {
         source = source.replace(/\$\(status\)/, '在线');
