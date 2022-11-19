@@ -54,6 +54,6 @@ module.exports = (req, res) => {
     source = source.replace('(broadcast)', '当前没有公告');
 
     res.status(200).setHeader('Content-Type', 'application/json')
-        .send(JSON.stringify(source, null, 4));
+        .send(source);
 
 }
