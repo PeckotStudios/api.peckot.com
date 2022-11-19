@@ -32,7 +32,7 @@ module.exports = (req, res) => {
     }
 
     // Get source file
-    var source = (() => {
+    var source = new String(() => {
         try {
             return fs.readFileSync(`${__dirname}/../PCL2HomePage/source.xaml`, 'utf-8');
         } catch (error) {
