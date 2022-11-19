@@ -37,7 +37,7 @@ module.exports = (req, res) => {
 
     // Read source file
     try {
-        source = fs.readFileSync('../PCL2HomePage/source.xaml', 'utf8');
+        source = fs.readFileSync('/PCL2HomePage/source.xaml', 'utf8');
     } catch (error) {
         api.error(400, `Source file request failed! ${error}`, 'Confirm whether the source file is available.');
         return;
