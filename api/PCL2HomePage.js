@@ -1,4 +1,4 @@
-module.exports = async (req, res) => {
+module.exports = (req, res) => {
     // Dependencies
     const api = require('../.lib/API')(res);
     const axios = require('axios');
@@ -31,16 +31,28 @@ module.exports = async (req, res) => {
         return;
     }
 
+    async function get(a, b, c) {
+        await axios.get(a).then(b).catch(c);
+    }
+
     // Placeholders replacement
     for (let i = 1; i < 4; i++) {
-        await axios.get('https://v1.hitokoto.cn').then(response => {
+        get('https://v1.hitokoto.cn', 
+        response => {
             source = source.replace('(hitokoto' + i + ')', response.hitokoto);
-        }).catch(error => {
+        },
+        error => {
             api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
             return;
-        });    
+        });
+        // axios.get('https://v1.hitokoto.cn').then(response => {
+        //     source = source.replace('(hitokoto' + i + ')', response.hitokoto);
+        // }).catch(error => {
+        //     api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
+        //     return;
+        // });    
     }
-    await axios.get(`https://api.peckot.com/api/MinecraftServerStatus/?host=${config.server.host}&port=${config.server.port}`).then(response => {
+    axios.get(`https://api.peckot.com/api/MinecraftServerStatus/?host=${config.server.host}&port=${config.server.port}`).then(response => {
         source = source.replace('(status)', response.code == 200 ? '在线' : '离线' );
         source = source.replace('(online)', response.data.players.online);
         source = source.replace('(max)', response.data.players.max);
