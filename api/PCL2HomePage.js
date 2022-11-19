@@ -41,13 +41,10 @@ module.exports = (req, res) => {
     //         return;
     //     });    
     // }
-    source = source.replace(/\$\(broadcast\)/, '当前没有公告');
+    source = source.replace(/\$\(broadcast\)/, '当前没有公告' + config);
+    axios.get('')
     MinecraftServerListPing.ping(4, config.server.host, config.server.port, 3000)
     .then(response => {
-        res.status(200).send(config);
-        res.status(200).send(config.server.host);
-        res.status(200).send(config.server.port);
-        res.status(200).send(response);
         source = source.replace(/\$\(status\)/, '在线');
         source = source.replace(/\$\(online\)/, response.players.online);
         source = source.replace(/\$\(max\)/, response.players.max);
