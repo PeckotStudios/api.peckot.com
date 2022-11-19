@@ -63,13 +63,6 @@ module.exports = (req, res) => {
 
     console.log(source);
 
-    fs.writeFile('/Users/joe/test.txt', content, err => {
-        if (err) {
-          console.error(err)
-          return
-        }
-        //文件写入成功。
-      })
     try {
         fs.writeFileSync(`/PCL2HomePage/peckot.xaml`, source);
     } catch (error) {
