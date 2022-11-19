@@ -1,58 +1,82 @@
 module.exports = (req, res) => {
     // Dependencies
     const api = require('../.lib/API')(res);
-    const fs = require('fs');
     const { MinecraftServerListPing } = require("minecraft-status");
+    const axios = require('axios');
+    const fs = require('fs');
 
-    // No inputs
-
-    // Const arguments
-    const {
-        host = 'mc.hypixel.net',
-        port = 25565,
-        protocol = 4,
-    } = req.query;
-
-    // Main process
-    var source;
+    // Preprocess
+    const updatetime = (() => {
+        try {
+            return JSON.parse(fs.readFileSync(__dirname + '/updatetime.json', 'utf-8'));
+        } catch (error) {
+            api.error(400, `File request failed! ${error}`, 'Confirm whether the updatetime file is available.');
+            return null;
+        }
+    });
+    const config = (() => {
+        try {
+            return JSON.parse(fs.readFileSync(`${__dirname}/../PCL2HomePage/config.json`, 'utf-8'));
+        } catch (error) {
+            api.error(400, `File request failed! ${error}`, 'Confirm whether the config file is available.');
+            return null;
+        }
+    });
 
     // Request limit
-    let isLimited = (() => {
-        var lastRequest = 0;
-        var intervel = 60000;
-        return function() {
-            var now = new Date().getTime();
-            if (now - lastRequest >= intervel) {
-                lastRequest = now;
-                return false;
-            } else {
-                return true;
-            }
-        };
-    })();
-    if (isLimited()) {
+    var time = new Date().getTime();
+    if (time - updatetime['PCL2HomePage'] <= config['interval'] ) {
         res.status(200).setHeader('Content-Type', 'application/json')
-                .redirect('/PCL2HomePage/Custom.xaml');
-    } 
-
-    // Read source file
-    try {
-        source = fs.readFileSync('/PCL2HomePage/source.xaml', 'utf8');
-    } catch (error) {
-        api.error(400, `Source file request failed! ${error}`, 'Confirm whether the source file is available.');
+                .redirect('/PCL2HomePage/peckot.xaml');
         return;
     }
 
-    var players;
-
+    // Get source file and server data
+    var source = (() => {
+        try {
+            return fs.readFileSync(`${__dirname}/../PCL2HomePage/source.xaml`, 'utf-8');
+        } catch (error) {
+            api.error(400, `Source file request failed! ${error}`, 'Confirm whether the source file is available.');
+            return '';
+        }
+    });
+    var serverdata;
     MinecraftServerListPing.ping(protocol, host, port, 3000)
     .then(response => {
-        players = response['players']['sample'];
-        
+        serverdata = response;
     })
     .catch(error => {
         api.error(400, `Data request failed! ${error}`, 'Confirm whether the server is online.');
     });
 
+    // Placeholders replacement
+    for (let i = 1; i < 4; i++) {
+        axios.get('https://v1.hitokoto.cn/?encode=text').then(response => {
+            source = source.replace(`(hitokoto${i})`, response);
+        });    
+    }
+    axios.get(`https://api.peckot.com/api/MinecraftServerStatus/?host=${config.host}&port=${config.port}`).then(response => {
+        source = source.replace('(status)', serverdata.code == 200 ? '在线' : '离线' );
+        source = source.replace('(online)', serverdata.players.online);
+        source = source.replace('(max)', serverdata.players.max);
+        source = source.replace('(playerlist)', (() => {
+            var playerlist = '';
+            serverdata.players.sample.forEach(player => {
+                playerlist += `${player.name}，`;
+            });
+            return playerlist;
+        }));
+    });
+    source = source.replace('(broadcast)', '当前没有公告');
+
+    try {
+        const data = fs.writeFileSync(`${__dirname}/../PCL2HomePage/peckot.xaml`, source);
+    } catch (error) {
+        api.error(400, `File request failed! ${error}`, 'Confirm whether the destination file is available.');
+        return;
+    }
+
+    res.status(200).setHeader('Content-Type', 'application/json')
+        .redirect('/PCL2HomePage/peckot.xaml');
 
 }
