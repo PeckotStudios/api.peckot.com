@@ -6,22 +6,14 @@ module.exports = (req, res) => {
     const fs = require('fs');
 
     // Preprocess
-    const updatetime = (() => {
-        try {
-            return JSON.parse(fs.readFileSync(__dirname + '/updatetime.json', 'utf-8'));
-        } catch (error) {
-            api.error(400, `File request failed! ${error}`, 'Confirm whether the updatetime file is available.');
-            return null;
-        }
-    });
-    const config = (() => {
-        try {
-            return JSON.parse(fs.readFileSync(`${__dirname}/../PCL2HomePage/config.json`, 'utf-8'));
-        } catch (error) {
-            api.error(400, `File request failed! ${error}`, 'Confirm whether the config file is available.');
-            return null;
-        }
-    });
+    var updatetime, config;
+    try {
+        updatetime = JSON.parse(fs.readFileSync(__dirname + '/updatetime.json', 'utf-8'));
+        config = JSON.parse(fs.readFileSync(`${__dirname}/../PCL2HomePage/config.json`, 'utf-8'));
+    } catch (error) {
+        api.error(400, `File request failed! ${error}`, 'Confirm whether the preprocess file is available.');
+        return;
+    }
 
     // Request limit
     var time = new Date().getTime();
@@ -32,14 +24,13 @@ module.exports = (req, res) => {
     }
 
     // Get source file
-    var source = new String(() => {
-        try {
-            return fs.readFileSync(`${__dirname}/../PCL2HomePage/source.xaml`, 'utf-8');
-        } catch (error) {
-            api.error(400, `Source file request failed! ${error}`, 'Confirm whether the source file is available.');
-            return '';
-        }
-    });
+    var source = new String();
+    try {
+        source += fs.readFileSync(`${__dirname}/../PCL2HomePage/source.xaml`, 'utf-8');
+    } catch (error) {
+        api.error(400, `Source file request failed! ${error}`, 'Confirm whether the source file is available.');
+        return;
+    }
 
     // Placeholders replacement
     for (let i = 1; i < 4; i++) {
