@@ -18,7 +18,7 @@ module.exports = (req, res) => {
 
     // Request limit
     var time = new Date().getTime();
-    if (time - updatetime['PCL2HomePage'] <= config['interval'] ) {
+    if (time - updatetime.PCL2HomePage <= config.interval ) {
         res.status(200).setHeader('Content-Type', 'application/json')
                 .redirect('/PCL2HomePage/peckot.xaml');
         return;
@@ -42,7 +42,7 @@ module.exports = (req, res) => {
             return;
         });    
     }
-    axios.get(`https://api.peckot.com/api/MinecraftServerStatus/?host=${config.host}&port=${config.port}`).then(response => {
+    axios.get(`https://api.peckot.com/api/MinecraftServerStatus/?host=${config.server.host}&port=${config.server.port}`).then(response => {
         source = source.replace('(status)', serverdata.code == 200 ? '在线' : '离线' );
         source = source.replace('(online)', serverdata.players.online);
         source = source.replace('(max)', serverdata.players.max);
