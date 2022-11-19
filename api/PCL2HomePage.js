@@ -1,10 +1,8 @@
 module.exports = (req, res) => {
     // Dependencies
     const api = require('../.lib/API')(res);
-    const { MinecraftServerListPing } = require("minecraft-status");
     const axios = require('axios');
     const fs = require('fs');
-    const path = require('path');
 
     // Preprocess
     var updatetime, config;
@@ -35,20 +33,20 @@ module.exports = (req, res) => {
 
     // Placeholders replacement
     for (let i = 1; i < 4; i++) {
-        axios.get('https://v1.hitokoto.cn/?encode=text').then(response => {
-            source = source.replace('(hitokoto' + i + ')', response);
+        axios.get('https://v1.hitokoto.cn').then(response => {
+            source = source.replace('(hitokoto' + i + ')', response.hitokoto);
         }).catch(error => {
             api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
             return;
         });    
     }
     axios.get(`https://api.peckot.com/api/MinecraftServerStatus/?host=${config.server.host}&port=${config.server.port}`).then(response => {
-        source = source.replace('(status)', serverdata.code == 200 ? '在线' : '离线' );
-        source = source.replace('(online)', serverdata.players.online);
-        source = source.replace('(max)', serverdata.players.max);
+        source = source.replace('(status)', response.code == 200 ? '在线' : '离线' );
+        source = source.replace('(online)', response.data.players.online);
+        source = source.replace('(max)', response.data.players.max);
         source = source.replace('(playerlist)', (() => {
             var playerlist = '';
-            serverdata.players.sample.forEach(player => {
+            response.data.players.sample.forEach(player => {
                 playerlist += `${player.name}，`;
             });
             return playerlist;
