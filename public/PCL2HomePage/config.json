@@ -1,7 +1,7 @@
 {
-    "interval": 10000,
+    "interval": 20000,
     "server": {
-        "host": "T9A.52MC.PRO",
+        "host": "t9a.52mc.pro",
         "port": 3040
     }
 }
