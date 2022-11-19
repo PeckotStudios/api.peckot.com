@@ -36,7 +36,10 @@ module.exports = (req, res) => {
     // Placeholders replacement
     for (let i = 1; i < 4; i++) {
         axios.get('https://v1.hitokoto.cn/?encode=text').then(response => {
-            source = source.replace(`(hitokoto${i})`, response);
+            source = source.replace('(hitokoto' + i + ')', response);
+        }).catch(error => {
+            api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
+            return;
         });    
     }
     axios.get(`https://api.peckot.com/api/MinecraftServerStatus/?host=${config.host}&port=${config.port}`).then(response => {
@@ -50,6 +53,9 @@ module.exports = (req, res) => {
             });
             return playerlist;
         }));
+    }).catch(error => {
+        api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
+        return;
     });
     source = source.replace('(broadcast)', '当前没有公告');
 
