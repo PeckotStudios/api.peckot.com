@@ -50,27 +50,28 @@ module.exports = (req, res) => {
                     playerlist: cookie.pl
                 });
                 return;
+            } else {
+                MinecraftServerListPing.ping(4, config.server.host, config.server.port, 10000)
+                    .then(response => {
+                        callback(null, {
+                            status:     '在线',
+                            online:     `${response.players.online}/${response.players.max}`,
+                            playerlist: (() => {
+                                var playerlist = [];
+                                response.players.sample.forEach(player => {
+                                    playerlist.push(`${player.name}`);
+                                });
+                                return playerlist.join('，');
+                            })
+                        });
+                    })
+                    .catch(ignore => {
+                        callback(null, {
+                            status:     '离线',
+                            online:     '无数据',
+                        });
+                    });
             }
-            MinecraftServerListPing.ping(4, config.server.host, config.server.port, 10000)
-                .then(response => {
-                    callback(null, {
-                        status:     '在线',
-                        online:     `${response.players.online}/${response.players.max}`,
-                        playerlist: (() => {
-                            var playerlist = [];
-                            response.players.sample.forEach(player => {
-                                playerlist.push(`${player.name}`);
-                            });
-                            return playerlist.join('，');
-                        })
-                    });
-                })
-                .catch(ignore => {
-                    callback(null, {
-                        status:     '离线',
-                        online:     '无数据',
-                    });
-                });
         },
         function(callback) {
             axios.get('https://v1.hitokoto.cn')
