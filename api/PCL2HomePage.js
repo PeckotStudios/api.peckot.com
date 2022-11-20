@@ -45,7 +45,7 @@ module.exports = (req, res) => {
     MinecraftServerListPing.ping(4, 't9a.52mc.pro', 3040, 3000)
         .then(response => {
             source = source.replace(/\$\(status\)/, '在线');
-            source = source.replace(/\$\(online\)/, response.players);
+            source = source.replace(/\$\(online\)/, response.players.online);
             source = source.replace(/\$\(max\)/, response.players.max);
             source = source.replace(/\$\(playerlist\)/, (() => {
                 var playerlist = '';
