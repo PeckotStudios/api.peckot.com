@@ -23,9 +23,9 @@
 	<!--Hints Starts-->
 	<Border Margin="0,0,0,10" Padding="2,8" BorderThickness="1" Background="{DynamicResource ColorBrush5}" CornerRadius="5" VerticalAlignment="Top" BorderBrush="{DynamicResource ColorBrush3}" Opacity="0.7">
 		<Grid Margin="10,0,0,0">
-			<local:MyTextButton ToolTip="文案" Name="Hint1" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Foreground="#FF000000">
+			<TextBlock Name="Hint1" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Foreground="#FF000000">
 					📰 $(hitokoto1)
-			</local:MyTextButton>
+			</TextBlock>
 			<TextBlock Name="Hint2" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Foreground="#00000000">
 					📰 $(hitokoto2)
 			</TextBlock>
@@ -66,7 +66,8 @@
 				<StackPanel Margin="20,35,20,10" Grid.Row="1">
 					<TextBlock Text="当前状态：$(status)" Margin="0,0,0,5" />
 					<TextBlock Text="在线人数：$(online)/$(max)" Margin="0,0,0,5" />
-					<TextBlock Text="玩家列表：$(playerlist)" Margin="0,0,0,5" />
+					<TextBlock Text="玩家列表：$(textlist)" Margin="0,0,0,5" />
+					<!--$(showlist)<TextBlock Text="$(playerlist)" Margin="0,0,0,5" LineHeight="20" TextWrapping="Wrap" />$(showlist)-->
 				</StackPanel>
 		</local:MyCard>
 	</Grid>

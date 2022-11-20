@@ -56,8 +56,7 @@ module.exports = (req, res) => {
                     callback(null, {
                         status:     '离线',
                         online:     'Null',
-                        max:        'Null',
-                        playerlist: '无数据'
+                        max:        'Null'
                     });
                 });
         },
@@ -78,10 +77,23 @@ module.exports = (req, res) => {
         }
     ],
         function(ignore, result) {
+            if (result[0].status == '在线') {
+                var online = parseInt(result[0].online);
+                if (online <= 0) {
+                    source = source.replace(/\$\(textlist\)/, '无玩家');
+                } else if (online >= 2) {
+                    source = source.replace(/\$\(textlist\)/, '');
+                    source = source.replace(/\<\!\-\-\$\(showlist\)|\$\(showlist\)\-\-\>/g, '');
+                    source = source.replace(/\$\(playerlist\)/, result[0].playerlist);
+                } else {
+                    source = source.replace(/\$\(textlist\)/, result[0].playerlist);
+                }
+            } else {
+                source = source.replace(/\$\(textlist\)/, '无数据');
+            }
             source = source.replace(/\$\(status\)/, result[0].status);
             source = source.replace(/\$\(online\)/, result[0].online);
             source = source.replace(/\$\(max\)/, result[0].max);
-            source = source.replace(/\$\(playerlist\)/, result[0].playerlist);
             source = source.replace(/\$\(hitokoto1\)/, result[1]);
             source = source.replace(/\$\(hitokoto2\)/, result[2]);
             source = source.replace(/\$\(hitokoto3\)/, result[3]);
