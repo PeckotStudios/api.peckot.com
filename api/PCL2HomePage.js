@@ -62,7 +62,7 @@ module.exports = (req, res) => {
             source = source.replace(/\$\(online\)/, 'NaN');
             source = source.replace(/\$\(max\)/, 'NaN');
             source = source.replace(/\$\(playerlist\)/, '无数据');
-            res.status(200).setHeader('Content-Type', 'application/json').send(error);
+            api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct or your server is online.');
         });
     
 
