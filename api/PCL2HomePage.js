@@ -54,7 +54,6 @@ module.exports = (req, res) => {
                 });
                 return playerlist;
             }));
-            res.status(200).setHeader('Content-Type', 'application/json').send(source);
         })
         .catch(error => {
             source = source.replace(/\$\(status\)/, '离线');
@@ -64,5 +63,6 @@ module.exports = (req, res) => {
             api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct or your server is online.');
         });
     
+        res.status(200).setHeader('Content-Type', 'application/json').send(source);
 
 }
