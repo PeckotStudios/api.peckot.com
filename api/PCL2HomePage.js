@@ -87,7 +87,7 @@ module.exports = (req, res) => {
                 .then(({ data }) => callback(null, data.hitokoto))
                 .catch(ignore => callback(null, 'Error: 一言语录获取失败'));
         },
-        function(callback){return;}
+        function(callback){callback(null, null);}
     ],
         function(ignore, result) {
             if (result[0].status == '在线') {
