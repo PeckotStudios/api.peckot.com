@@ -43,12 +43,13 @@ module.exports = (req, res) => {
     async.series([
         function(callback) {
             // Request limit
+            
             if (time - cookie.ti <= config.interval ) {
-                callback(null, {
-                    status: cookie.st,
-                    online: cookie.ol,
-                    playerlist: cookie.pl
-                });
+                // callback(null, {
+                //     status: cookie.st,
+                //     online: cookie.ol,
+                //     playerlist: cookie.pl
+                // });
             } else {
                 MinecraftServerListPing.ping(4, config.server.host, config.server.port, 10000)
                     .then(response => {
@@ -86,8 +87,7 @@ module.exports = (req, res) => {
             axios.get('https://v1.hitokoto.cn')
                 .then(({ data }) => callback(null, data.hitokoto))
                 .catch(ignore => callback(null, 'Error: 一言语录获取失败'));
-        },
-        function(callback){callback(null, null);}
+        }
     ],
         function(ignore, result) {
             if (result[0].status == '在线') {
@@ -110,7 +110,7 @@ module.exports = (req, res) => {
             source = source.replace(/\$\(hitokoto2\)/, result[2]);
             source = source.replace(/\$\(hitokoto3\)/, result[3]);
             source = source.replace(/\$\(time\)/, time);
-            res.setHeader('Set-Cookie', `ut=${time}; st=${result[0].status}; ol=${result[0].online}; pl=${result[0].playerlist}; httpOnly;`)
+            res.setHeader('Set-Cookie', `ut=${time}; st=${result[0].status}; ol=${result[0].online}; pl=${result[0].playerlist}; httpOnly;`);
             res.status(200).setHeader('Content-Type', 'application/json;').send(source);
         }
     );
