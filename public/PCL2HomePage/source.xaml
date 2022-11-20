@@ -27,7 +27,7 @@
 			<TextBlock Name="Hint1" Margin="20,0,0,0" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Foreground="#FF000000">$(hitokoto1)</TextBlock>
 			<TextBlock Name="Hint2" Margin="20,0,5,0" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Foreground="#00000000">$(hitokoto2)</TextBlock>
 			<TextBlock Name="Hint3" Margin="20,0,5,0" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Foreground="#00000000">$(hitokoto3)</TextBlock>
-			<local:MyTextButton Margin="5,0,5,0" Width="30" Height="15" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="#FF000000"
+			<local:MyTextButton Margin="5,0,5,0" Width="30" Height="15" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource ColorBrush1}"
 				Text="投稿" EventType="打开网页" EventData="https://hitokoto.cn/dashboard#/hitokoto/append"
 				ToolTip="文案来自一言(hitokoto.cn) &#x000A;点击此处可跳转至文案投稿"/>
 		</Grid>
@@ -66,7 +66,7 @@
 				</StackPanel>
 		</local:MyCard>
 	</Grid>
-
+	
 	<!--Tmp News-->
 	<Grid Margin="0,0,0,15">
 		<Grid.ColumnDefinitions>
@@ -91,9 +91,9 @@
 			</Grid.RowDefinitions>
 			<local:MyCard Margin="0,0,7.5,15" Title="快捷菜单" Grid.Row="0">
 				<StackPanel Margin="20,35,20,10">
-					<local:MyButton Height="25" Padding="13,0,13,0" Text="" EventType="刷新主页" Margin="0,0,10,0" ToolTip="点击刷新新闻主页" />
-					<local:MyButton Width="300" Height="35" Padding="13,0,13,0" Text="刷新" EventType="刷新主页" Margin="0,0,10,0" ToolTip="点击刷新新闻主页" />
-					<local:MyButton Width="300" Height="35" Padding="13,0,13,0" Text="刷新" EventType="刷新主页" Margin="0,0,10,0" ToolTip="点击刷新新闻主页" />
+					<local:MyButton Height="30" Text="计算器" EventType="打开文件" EventData="calc.exe" Margin="0,0,0,10" ToolTip="点击打开计算器" />
+					<local:MyButton Height="30" Text="命令提示符" EventType="打开文件" EventData="cmd.exe" Margin="0,0,0,10" ToolTip="点击打开命令行" />
+					<local:MyButton Height="30" Text="控制面板" EventType="打开文件" EventData="control.exe" Margin="0,0,0,10" ToolTip="点击打开控制面板" />
 				</StackPanel>
 			</local:MyCard>
 			<local:MyCard Margin="0,0,7.5,15" Title="日历" Grid.Row="1">
@@ -126,28 +126,38 @@
 
 </StackPanel>
 
-<Border Background="#CCFFFFFF" Height="140" Margin="-25,30,-25,-10" BorderThickness="0,2,0,0" BorderBrush="#AAAAAAAA">
+<Border Background="#CCFFFFFF" Height="175" Margin="-25,30,-25,-10" BorderThickness="0,2,0,0" BorderBrush="#AAAAAAAA">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="1*"></ColumnDefinition>
 			<ColumnDefinition Width="1*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 		<StackPanel Margin="40,15,0,10" Grid.Column="0">
-			<TextBlock Text="PCL2 × Peckot Studios" FontSize="16" Margin="0,5,5,5" />
-			<TextBlock Text="Powered by Pectics" />
+			<TextBlock Text="PCL2 × Peckot Studios" FontWeight="Bold" FontSize="16" Margin="0,5,5,5" />
+			<TextBlock Text="Powered by Pectics" FontWeight="Bold" />
 	
 			<StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-				<TextBlock Text="官方网站：" />
-				<local:MyTextButton Text="https://peckot.com" EventType="打开网页" EventData="https://www.peckot.com" ToolTip="点击打开官方网站" />
+				<TextBlock Text="官方网站：" FontWeight="Bold" />
+				<local:MyTextButton Text="https://peckot.com" EventType="打开网页" EventData="https://peckot.com" ToolTip="点击打开官方网站" />
 			</StackPanel>
 	
 			<StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-				<TextBlock Text="官方博客：" />
+				<TextBlock Text="官方博客：" FontWeight="Bold" />
 				<local:MyTextButton Text="https://blog.peckot.com" EventType="打开网页" EventData="https://blog.peckot.com" ToolTip="点击打开官方博客" />
 			</StackPanel>
+			
+			<StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+				<TextBlock Text="PeckotMC：" FontWeight="Bold" />
+				<local:MyTextButton Text="https://mc.peckot.com" EventType="打开网页" EventData="https://mc.peckot.com" ToolTip="点击打开PeckotMC皮肤站" />
+			</StackPanel>
+			
+			<StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+				<TextBlock Text="Peckot Docs：" FontWeight="Bold" />
+				<local:MyTextButton Text="https://docs.peckot.com" EventType="打开网页" EventData="https://docs.peckot.com" ToolTip="点击打开帮助和开发文档" />
+			</StackPanel>
 	
 			<StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-				<TextBlock Text="Github：" />
+				<TextBlock Text="Github：" FontWeight="Bold" />
 				<local:MyTextButton Text="https://github.com/Peckot-Studios" EventType="打开网页" EventData="https://github.com/Peckot-Studios" ToolTip="点击打开Github仓库" />
 			</StackPanel>
 		</StackPanel>
