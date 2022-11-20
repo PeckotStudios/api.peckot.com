@@ -49,7 +49,6 @@ module.exports = (req, res) => {
                     online: cookie.ol,
                     playerlist: cookie.pl
                 });
-                return;
             } else {
                 MinecraftServerListPing.ping(4, config.server.host, config.server.port, 10000)
                     .then(response => {
