@@ -2,6 +2,7 @@ module.exports = (req, res) => {
     // Dependencies
     const api = require('../.lib/API')(res);
     const { MinecraftServerListPing } = require("minecraft-status");
+    const async = require('async');
     const axios = require('axios');
     const fs = require('fs');
 
@@ -33,36 +34,59 @@ module.exports = (req, res) => {
     }
 
     // Placeholders replacement
-    // for (let i = 1; i < 4; i++) {
-    //     axios.get('https://v1.hitokoto.cn').then(({ response }) => {
-    //         source = source.replace(/\$\(hitokoto\)/, response.hitokoto);
-    //     }).catch(error => {
-    //         api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct.');
-    //         return;
-    //     });    
-    // }
     source = source.replace(/\$\(broadcast\)/, '当前没有公告');
-    MinecraftServerListPing.ping(4, 't9a.52mc.pro', 3040, 10000)
-        .then(response => {
-            source = source.replace(/\$\(status\)/, '在线');
-            source = source.replace(/\$\(online\)/, response.players.online);
-            source = source.replace(/\$\(max\)/, response.players.max);
-            source = source.replace(/\$\(playerlist\)/, (() => {
-                var playerlist = '';
-                response.players.sample.forEach(player => {
-                    playerlist += `${player.name}，`;
+    async.series([
+        function(callback) {
+            MinecraftServerListPing.ping(4, config.server.host, config.server.port, 10000)
+                .then(response => {
+                    callback(null, {
+                        status:     '在线',
+                        online:     response.players.online,
+                        max:        response.players.max,
+                        playerlist: (() => {
+                            var playerlist = [];
+                            response.players.sample.forEach(player => {
+                                playerlist.push(`${player.name}`);
+                            });
+                            return playerlist.join('，');
+                        })
+                    });
+                })
+                .catch(ignore => {
+                    callback(null, {
+                        status:     '离线',
+                        online:     'Null',
+                        max:        'Null',
+                        playerlist: '无数据'
+                    });
                 });
-                return playerlist;
-            }));
-        })
-        .catch(error => {
-            source = source.replace(/\$\(status\)/, '离线');
-            source = source.replace(/\$\(online\)/, 'NaN');
-            source = source.replace(/\$\(max\)/, 'NaN');
-            source = source.replace(/\$\(playerlist\)/, '无数据');
-            api.error(400, `Data request failed! ${error}`, 'Confirm whether your parameters are correct or your server is online.');
-        });
-    
-        res.status(200).setHeader('Content-Type', 'application/json').send(source);
+        },
+        function(callback) {
+            axios.get('https://v1.hitokoto.cn')
+                .then(response => callback(null, response.hitokoto))
+                .catch(ignore => callback(null, 'Error: 一言语录获取失败'));
+        },
+        function(callback) {
+            axios.get('https://v1.hitokoto.cn')
+                .then(response => callback(null, response.hitokoto))
+                .catch(ignore => callback(null, 'Error: 一言语录获取失败'));
+        },
+        function(callback) {
+            axios.get('https://v1.hitokoto.cn')
+                .then(response => callback(null, response.hitokoto))
+                .catch(ignore => callback(null, 'Error: 一言语录获取失败'));
+        }
+    ],
+        function(ignore, result) {
+            source = source.replace(/\$\(status\)/, result[0].status);
+            source = source.replace(/\$\(online\)/, result[0].online);
+            source = source.replace(/\$\(max\)/, result[0].max);
+            source = source.replace(/\$\(playerlist\)/, result[0].playerlist);
+            source = source.replace(/\$\(hitokoto1\)/, result[1]);
+            source = source.replace(/\$\(hitokoto2\)/, result[2]);
+            source = source.replace(/\$\(hitokoto3\)/, result[3]);
+            res.status(200).setHeader('Content-Type', 'application/json').send(source);
+        }
+    );
 
 }
