@@ -33,13 +33,6 @@ module.exports = (req, res) => {
     }
 
     // Placeholders replacement
-    for (let i = 1; i < 4; i++) {
-        axios.get('https://v1.hitokoto.cn').then(response => {
-            source = source.replace(/\$\(hitokoto\)/, response.hitokoto);
-        }).catch(ignore => {
-            source = source.replace(/\$\(hitokoto\)/g, 'Error: 一言获取失败');
-        });    
-    }
     source = source.replace(/\$\(broadcast\)/, '当前没有公告');
     MinecraftServerListPing.ping(4, config.server.host, config.server.port, 10000)
         .then(response => {
@@ -60,6 +53,13 @@ module.exports = (req, res) => {
             source = source.replace(/\$\(max\)/, 'NaN');
             source = source.replace(/\$\(playerlist\)/, '无数据');
         });
+    for (let i = 1; i < 4; i++) {
+        axios.get('https://v1.hitokoto.cn').then(response => {
+            source = source.replace(/\$\(hitokoto\)/, response.hitokoto);
+        }).catch(ignore => {
+            source = source.replace(/\$\(hitokoto\)/g, 'Error: 一言获取失败');
+        });    
+    }
 
     // Output
     res.status(200).setHeader('Content-Type', 'application/json').send(source);
