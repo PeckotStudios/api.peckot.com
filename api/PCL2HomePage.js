@@ -6,26 +6,31 @@ module.exports = (req, res) => {
     const axios = require('axios');
     const fs = require('fs');
 
+    // Data
+    const time = new Date().getTime();
+    let cookie = {};
+    var config, source = new String();
+
+    // Cookies
+    (req.headers.cookie || '').split(';').forEach(item => {
+        if (!item) {
+            return;
+        }
+        const arr = item.split('=');
+        const key = arr[0].trim();
+        const val = arr[1].trim();
+        cookie[key] = val;
+    })
+
     // Preprocess
-    var updatetime, config;
     try {
-        updatetime = JSON.parse(fs.readFileSync(`${__dirname}/updatetime.json`, 'utf-8'));
         config = JSON.parse(fs.readFileSync(`${__dirname}/../public/PCL2HomePage/config.json`, 'utf-8'));
     } catch (error) {
         api.error(400, `File request failed! ${error}`, 'Confirm whether the preprocess file is available.');
         return;
     }
 
-    // Request limit
-    var time = new Date().getTime();
-    if (time - updatetime.PCL2HomePage <= config.interval ) {
-        res.status(200).setHeader('Content-Type', 'application/json')
-                .redirect('/PCL2HomePage/peckot.xaml');
-        return;
-    }
-
     // Get source file
-    var source = new String();
     try {
         source += fs.readFileSync(`${__dirname}/../public/PCL2HomePage/source.xaml`, 'utf-8');
     } catch (error) {
@@ -37,12 +42,19 @@ module.exports = (req, res) => {
     source = source.replace(/\$\(broadcast\)/, '当前没有公告');
     async.series([
         function(callback) {
+            // Request limit
+            if (time - cookie.ti <= config.interval ) {
+                callback(null, {
+                    status: cookie.st,
+                    online: cookie.ol,
+                    playerlist: cookie.pl
+                });
+            }
             MinecraftServerListPing.ping(4, config.server.host, config.server.port, 10000)
                 .then(response => {
                     callback(null, {
                         status:     '在线',
-                        online:     response.players.online,
-                        max:        response.players.max,
+                        online:     `${response.players.online}/${response.players.max}`,
                         playerlist: (() => {
                             var playerlist = [];
                             response.players.sample.forEach(player => {
@@ -55,8 +67,7 @@ module.exports = (req, res) => {
                 .catch(ignore => {
                     callback(null, {
                         status:     '离线',
-                        online:     'Null',
-                        max:        'Null'
+                        online:     '无数据',
                     });
                 });
         },
@@ -78,7 +89,7 @@ module.exports = (req, res) => {
     ],
         function(ignore, result) {
             if (result[0].status == '在线') {
-                var online = parseInt(result[0].online);
+                var online = parseInt(result[0].online.split('/')[0]);
                 if (online <= 0) {
                     source = source.replace(/\$\(textlist\)/, '无玩家');
                 } else if (online >= 2) {
@@ -93,11 +104,12 @@ module.exports = (req, res) => {
             }
             source = source.replace(/\$\(status\)/, result[0].status);
             source = source.replace(/\$\(online\)/, result[0].online);
-            source = source.replace(/\$\(max\)/, result[0].max);
             source = source.replace(/\$\(hitokoto1\)/, result[1]);
             source = source.replace(/\$\(hitokoto2\)/, result[2]);
             source = source.replace(/\$\(hitokoto3\)/, result[3]);
-            res.status(200).setHeader('Content-Type', 'application/json').send(source);
+            source = source.replace(/\$\(time\)/, time);
+            res.setHeader('Set-Cookie', `ut=${time}; st=${result[0].status}; ol=${result[0].online}; pl=${result[0].playerlist}; httpOnly;`)
+            res.status(200).setHeader('Content-Type', 'application/json;').send(source);
         }
     );
 
