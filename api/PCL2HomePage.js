@@ -44,7 +44,6 @@ module.exports = (req, res) => {
     source = source.replace(/\$\(broadcast\)/, '当前没有公告');
     MinecraftServerListPing.ping(4, 't9a.52mc.pro', 3040, 3000)
         .then(response => {
-            response = JSON.parse(response);
             source = source.replace(/\$\(status\)/, '在线');
             source = source.replace(/\$\(online\)/, response.players.online);
             source = source.replace(/\$\(max\)/, response.players.max);
@@ -55,6 +54,7 @@ module.exports = (req, res) => {
                 });
                 return playerlist;
             }));
+            source=response;
         })
         .catch(error => {
             source = source.replace(/\$\(status\)/, '离线');
@@ -62,6 +62,6 @@ module.exports = (req, res) => {
             source = source.replace(/\$\(max\)/, 'NaN');
             source = source.replace(/\$\(playerlist\)/, '无数据');
         });
-    res.status(200).setHeader('Content-Type', 'application/xml').send(source);
+    res.status(200).setHeader('Content-Type', 'application/json').send(source);
 
 }
