@@ -38,7 +38,6 @@ module.exports = (req, res) => {
             source = source.replace(/\$\(hitokoto\)/, response.hitokoto);
         }).catch(ignore => {
             source = source.replace(/\$\(hitokoto\)/g, 'Error: 一言获取失败');
-            return;
         });    
     }
     source = source.replace(/\$\(broadcast\)/, '当前没有公告');
