@@ -62,7 +62,7 @@
 					<TextBlock Text="当前状态：$(status)" Margin="0,0,0,5" />
 					<TextBlock Text="在线人数：$(online)" Margin="0,0,0,5" />
 					<TextBlock Text="玩家列表：$(textlist)" Margin="0,0,0,5" />
-					<!--$(showlist)<TextBlock Text="$(playerlist)" Margin="0,0,0,5" LineHeight="20" TextWrapping="Wrap" />$(showlist)-->
+					<!--$(showlist)<TextBlock Text="$(playerlist)" Margin="0,0,0,5" LineHeight="18" TextWrapping="Wrap" />$(showlist)-->
 				</StackPanel>
 		</local:MyCard>
 	</Grid>
