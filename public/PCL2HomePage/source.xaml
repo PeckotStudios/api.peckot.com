@@ -156,6 +156,6 @@
 				<local:MyTextButton Text="https://github.com/Peckot-Studios" EventType="打开网页" EventData="https://github.com/Peckot-Studios" ToolTip="点击打开Github仓库" />
 			</StackPanel>
 		</StackPanel>
-		<Image Width="100" Height="100" HorizontalAlignment="Center" Source="https://peckot.com/favicon.svg" Grid.Column="1" />
+		<Image Width="115.254237288" Height="100" HorizontalAlignment="Center" Source="https://peckot.com/peckot-rd-1.png" Grid.Column="1" />
 	</Grid>
 </Border>
