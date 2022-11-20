@@ -151,7 +151,7 @@
 				<local:MyTextButton Text="https://github.com/Peckot-Studios" EventType="打开网页" EventData="https://github.com/Peckot-Studios" ToolTip="点击打开Github仓库" />
 			</StackPanel>
 		</StackPanel>
-		<Viewbox Width="115.254237288" Height="100" HorizontalAlignment="Center" Grid.Column="1">
+		<Viewbox Margin="0,15,50,10" Width="115.254237288" Height="100" HorizontalAlignment="Right" Grid.Column="1">
 			<Path Fill="{DynamicResource ColorBrush3}" Data="M20 100v-70h10v-10h40v10h10v40h-10v10h-20v-20h10v-20h-20v60zm70 0v-20h60v20zm0-30v-20h60v20zm0-30v-20h60v20zm70 50v-20h20v10h20v-40h-20v10h-20v-20h10v-10h40v10h10v60h-10v10h-40v-10zm-140 100v-80h20v20h10v-10h10v-10h20v20h-10v10h-10v10h10v10h10v30h-20v-20h-10v-10h-10v30zm70-10v-60h10v-10h40v10h10v60h-10v10h-40v-10zm20-10h20v-40h-20zm70 20v-60h-20v-20h60v20h-20v60zm-180 0q0 20 20 20h200q20 0 20-20v-170q0-20-20-20h-200q-20 0-20 20z" />
 		</Viewbox>
 	</Grid>
