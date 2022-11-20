@@ -8,8 +8,8 @@ module.exports = (req, res) => {
     // Preprocess
     var updatetime, config;
     try {
-        updatetime = JSON.parse(fs.readFileSync(`${__dirname}/updatetime.json`, 'utf-8'));
-        config = JSON.parse(fs.readFileSync(`${__dirname}/../public/PCL2HomePage/config.json`, 'utf-8'));
+        updatetime = JSON.parse(fs.readFileSync(`${__dirname}/updatetime.json`, 'utf8'));
+        config = JSON.parse(fs.readFileSync(`${__dirname}/../public/PCL2HomePage/config.json`, 'utf8'));
     } catch (error) {
         api.error(400, `File request failed! ${error}`, 'Confirm whether the preprocess file is available.');
         return;
@@ -26,7 +26,7 @@ module.exports = (req, res) => {
     // Get source file
     var source = new String();
     try {
-        source += fs.readFileSync(`${__dirname}/../public/PCL2HomePage/source.xaml`, 'utf-8');
+        source += fs.readFileSync(`${__dirname}/../public/PCL2HomePage/source.xaml`, 'utf8');
     } catch (error) {
         api.error(400, `Source file request failed! ${error}`, 'Confirm whether the source file is available.');
         return;
@@ -34,7 +34,7 @@ module.exports = (req, res) => {
 
     // Placeholders replacement
     source = source.replace(/\$\(broadcast\)/, '当前没有公告');
-    MinecraftServerListPing.ping(4, config.server.host, config.server.port, 10000)
+    MinecraftServerListPing.ping(4, new String(config.server.host), parseInt(config.server.port), 10000)
         .then(response => {
             source = source.replace(/\$\(status\)/, '在线');
             source = source.replace(/\$\(online\)/, response.players.online);
