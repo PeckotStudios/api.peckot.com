@@ -62,18 +62,18 @@ module.exports = (req, res) => {
                 });
         },
         function(callback) {
-            axios.get('https://v1.hitokoto.cn/?encode=text')
-                .then(response => callback(null, response))
+            axios.get('https://v1.hitokoto.cn')
+                .then(response => callback(null, response.hitokoto))
                 .catch(ignore => callback(null, 'Error: 一言语录获取失败'));
         },
         function(callback) {
-            axios.get('https://v1.hitokoto.cn/?encode=text')
-                .then(response => callback(null, response))
+            axios.get('https://v1.hitokoto.cn')
+                .then(response => callback(null, response.hitokoto))
                 .catch(ignore => callback(null, 'Error: 一言语录获取失败'));
         },
         function(callback) {
-            axios.get('https://v1.hitokoto.cn/?encode=text')
-                .then(response => callback(null, response))
+            axios.get('https://v1.hitokoto.cn')
+                .then(response => callback(null, response.hitokoto))
                 .catch(ignore => callback(null, 'Error: 一言语录获取失败'));
         }
     ],
