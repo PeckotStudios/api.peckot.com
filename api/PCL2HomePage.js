@@ -74,7 +74,7 @@ module.exports = (req, res) => {
                                 response.players.sample.forEach(player => {
                                     playerlist.push(`${player.name}`);
                                 });
-                                return playerlist.join('，');
+                                return playerlist.join(', ');
                             })()
                         };
                         callback(null, result);
