@@ -108,7 +108,7 @@ module.exports = (req, res) => {
                 	.replace(/\$\(hitokoto1\)/, result[1])
                 	.replace(/\$\(hitokoto2\)/, result[2])
                 	.replace(/\$\(hitokoto3\)/, result[3])
-                	.replace(/\$\(time\)/,`${time.getMonth()+1}/${time.getDate()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`);
+                	.replace(/\$\(time\)/,`${time.toLocaleDateString()} ${time.toLocaleTimeString()}`);
                 // res.setHeader('Set-Cookie', cookie.serialize('data', JSON.stringify({
                 //     ti: time.getTime(),
                 //     st: result[0].status,
