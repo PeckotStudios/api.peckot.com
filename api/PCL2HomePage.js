@@ -9,7 +9,7 @@ module.exports = (req, res) => {
 
     // Data
     const cookies = cookie.parse(req.headers.cookie || '');
-    const time = new Date();
+    const time = new Date(new Date().getTime() + 28800000);
     const
         host = 't9a.52mc.pro',
         port = 3040,
