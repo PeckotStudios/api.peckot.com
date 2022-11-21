@@ -8,12 +8,11 @@ module.exports = (req, res) => {
     const fs = require('fs');;
 
     // Data
-    const cookies = cookie.parse(req.headers.cookie || '');
-    const time = new Date();
     const
+        cookies = cookie.parse(req.headers.cookie || ''),
+        time = new Date(),
         host = 't9a.52mc.pro',
-        port = 3040,
-        interval = 20000; //ms
+        port = 3040;
     let data = {}, source = new String();
 
     // Preprocess
