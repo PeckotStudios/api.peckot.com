@@ -9,7 +9,7 @@ module.exports = (req, res) => {
 
     // Data
     const cookies = cookie.parse(req.headers.cookie || '');
-    const time = new Date(new Date().getTime() + 28800000);
+    const time = new Date();
     const
         host = 't9a.52mc.pro',
         port = 3040,
@@ -108,11 +108,15 @@ module.exports = (req, res) => {
                 	.replace(/\$\(hitokoto1\)/, result[1])
                 	.replace(/\$\(hitokoto2\)/, result[2])
                 	.replace(/\$\(hitokoto3\)/, result[3])
-                	.replace(/\$\(time\)/, (() => {
-                        let d = time.toLocaleDateString().split('/');
-                        let t = time.toLocaleTimeString().split(' ');
-                        return `${d[2]}/${d[0]}/${d[1]} ${t[0]}`;
-                    })());
+                	.replace(/\$\(time\)/, time.toLocaleString('zh-CN', {
+                        timeZone: "Asia/Shanghai",
+                        hour12: false,
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit"
+                    }));
                 // res.setHeader('Set-Cookie', cookie.serialize('data', JSON.stringify({
                 //     ti: time.getTime(),
                 //     st: result[0].status,
