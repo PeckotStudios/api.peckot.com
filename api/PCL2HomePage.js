@@ -108,7 +108,11 @@ module.exports = (req, res) => {
                 	.replace(/\$\(hitokoto1\)/, result[1])
                 	.replace(/\$\(hitokoto2\)/, result[2])
                 	.replace(/\$\(hitokoto3\)/, result[3])
-                	.replace(/\$\(time\)/,`${time.toLocaleDateString()} ${time.toLocaleTimeString()}`);
+                	.replace(/\$\(time\)/, (() => {
+                        let d = time.toLocaleDateString().split('/');
+                        let t = time.toLocaleTimeString().split(' ');
+                        return `${d[2]}/${d[0]}/${d[1]} ${t[0]}`;
+                    })());
                 // res.setHeader('Set-Cookie', cookie.serialize('data', JSON.stringify({
                 //     ti: time.getTime(),
                 //     st: result[0].status,
