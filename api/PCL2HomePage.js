@@ -11,8 +11,8 @@ module.exports = (req, res) => {
     const
         cookies = cookie.parse(req.headers.cookie || ''),
         time = new Date(),
-        host = 't9a.52mc.pro',
-        port = 3040;
+        host = 'play.peckot.com',
+        port = 25565;
     let data = {}, source = new String();
 
     // Preprocess
