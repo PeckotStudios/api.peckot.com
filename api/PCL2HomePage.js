@@ -65,18 +65,18 @@ module.exports = (req, res) => {
             function(callback) {
                 mslp.ping(4, host, port, 10000)
                     .then(response => {
-                        result = {
+                        callback(null, {
                             status: '在线',
                             online: `${response.players.online}/${response.players.max}`,
                             playerlist: (() => {
                                 let playerlist = [];
+                                if (response.players.sample == undefined) return '';
                                 response.players.sample.forEach(player => {
                                     playerlist.push(`${player.name}`);
                                 });
                                 return playerlist.join(', ');
                             })()
-                        };
-                        callback(null, result);
+                        });
                     })
                     .catch(ignore => {
                         callback(null, {
