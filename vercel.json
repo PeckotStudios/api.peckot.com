@@ -1,8 +1,13 @@
 {
-    "rewrites": [
-        {
-          "source": "/(.*)",
-          "destination": "/api/$1"
-        }
-    ]
+  "version": 2,
+  "routes": [
+    {
+      "src": "/(o|O)(p|P)(e|E)(n|N)(a|A)(i|I)(/.*)?",
+      "dest": "https://api.openai.com$7"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/$1"
+    }
+  ]
 }
