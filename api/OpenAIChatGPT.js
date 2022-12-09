@@ -91,9 +91,9 @@ const saveDialogue = (userId, newDia) => {
             const docs = await collection.findOne({ id: userId });
             if (null != docs) {
                 const dialogue = docs.dia.length >= 512 ? docs.dia.substring(docs.dia.length - 512) : docs.dia;
-                await collection.updateOne({ id: userId }, { $set: { dia: dialogue.concat(newDia.replace(/\n/g, "")) } });
+                collection.updateOne({ id: userId }, { $set: { dia: dialogue.concat(newDia.replace(/\n/g, "")) } });
             } else {
-                await collection.insertOne({ id: userId, dia: head.concat(newDia.replace(/\n/g, "")) });
+                collection.insertOne({ id: userId, dia: head.concat(newDia.replace(/\n/g, "")) });
             }
         }
         client.close();
@@ -113,7 +113,7 @@ const deleteDialogue = userId => {
         } else {
             const collection = client.db("peckotapi").collection("openaichatgpt");
             const docs = await collection.findOne({ id: userId });
-            if (null != docs) await collection.deleteOne({ id: userId });
+            if (null != docs) collection.deleteOne({ id: userId });
         }
         client.close();
     });
