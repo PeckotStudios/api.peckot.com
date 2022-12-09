@@ -48,7 +48,7 @@ export default async (req, res) => {
         const response = await openai.createCompletion({
             model: "text-davinci-003",
             prompt: dialogue,
-            max_tokens: 300,
+            max_tokens: 100,
             temperature: 0.9,
             frequency_penalty: 0,
             presence_penalty: 0.6,
