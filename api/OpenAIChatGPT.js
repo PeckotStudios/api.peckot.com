@@ -113,7 +113,7 @@ const deleteDialogue = userId => {
         } else {
             const collection = client.db("peckotapi").collection("openaichatgpt");
             const docs = await collection.findOne({ id: userId });
-            if (null != docs) collection.deleteOne({ id: userId });
+            if (null != docs) await collection.deleteOne({ id: userId });
         }
         client.close();
     });
