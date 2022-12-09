@@ -48,7 +48,7 @@ export default async (req, res) => {
         await hitokoto(),
         await hitokoto(),
     ];
-    await collection.updateOne({ apiname: "PCL2HomePage" }, {
+    await mongocl.updateOne({ apiname: "PCL2HomePage" }, {
         $set: {
             apiname: "PCL2HomePage",
             lastupdate: time.getTime(),
