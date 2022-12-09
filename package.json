@@ -13,6 +13,8 @@
     "cookie": "^0.5.0",
     "http-proxy-middleware": "^2.0.6",
     "minecraft-status": "^1.1.0",
+    "mongodb": "^4.12.1",
+    "openai": "^3.1.0",
     "path-pattern": "^2.1.1",
     "ws": "^8.11.0"
   }

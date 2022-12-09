@@ -1,134 +1,136 @@
-module.exports = (req, res) => {
-    // Dependencies
-    const api = require('../.lib/API')(res);
-    const mslp = require("minecraft-status").MinecraftServerListPing;
-    const async = require('async');
-    const axios = require('axios');
-    const cookie = require('cookie');
-    const fs = require('fs');;
+// Dependencies
+import { error as $error } from "../.lib/API";
+import { get } from "axios";
+import { readFileSync } from "fs";
+import { MinecraftServerListPing as mslp } from "minecraft-status";
+import { MongoClient as mongo, ServerApiVersion as mongov } from "mongodb";
 
-    // Data
-    const
-        cookies = cookie.parse(req.headers.cookie || ''),
-        time = new Date(),
-        host = 'cn-zz-bgp-6.natfrp.cloud',
-        port = 55505;
-    let data = {}, source = new String();
+// Data
+const hitonode = process.env.PCL2_HITOKOTO_NODE;
+const host = process.env.PECKOTMC_HOST;
+const interval = process.env.PCL2_INTERVAL;
+const mongouri = process.env.MONGODB_URI;
+const port = process.env.PECKOTMC_PORT;
+const time = new Date();
+
+export default async (req, res) => {
 
     // Preprocess
+    res.setHeader("Content-Type", "application/json");
+    var source = new String();
     try {
-        source += fs.readFileSync(`${__dirname}/../public/PCL2HomePage/source.xaml`, 'utf-8');
+        source += readFileSync(`${__dirname}/../public/PCL2HomePage/source.xaml`, "utf-8");
     } catch (error) {
-        api.error(400, `File request failed! ${error}`, 'Confirm whether the source file is available.');
+        res.send($error(error, "Confirm whether the source file is available."));
         return;
     }
 
-    // Functions
-    function hitokoto(callback) {
-        axios.get('https://v1.hitokoto.cn')
-            .then(({ data }) => callback(null, data.hitokoto))
-            .catch(ignore => callback(null, 'Error: 一言语录获取失败'));
-    }
-
-    // Placeholders replacement
-    source = source.replace(/\$\(broadcast\)/, '当前没有公告');
-
-    // Request limit
-    if (cookies.data != undefined) data = JSON.parse(cookies.data);
-    // if (time.getTime() - data.ti <= parseInt(interval)) {
-    //     let ti = new Date(data.ti);
-    //     if (data.st == '在线') {
-    //         let online = parseInt(data.ol.split('/')[0]);
-    //         if (online <= 0) {
-    //             source = source.replace(/\$\(textlist\)/, '无玩家');
-    //         } else if (online >= 2) {
-    //             source = source
-    //                 .replace(/\$\(textlist\)/, '')
-    //                 .replace(/\<\!\-\-\$\(showlist\)|\$\(showlist\)\-\-\>/g, '')
-    //                 .replace(/\$\(playerlist\)/, data.pl);
-    //         } else {
-    //             source = source.replace(/\$\(textlist\)/, data.pl);
-    //         }
-    //     } else {
-    //         source = source.replace(/\$\(textlist\)/, '无数据');
-    //     }
-    //     source = source
-    //         .replace(/\$\(status\)/, data.st)
-    //     	.replace(/\$\(online\)/, data.ol)
-    //     	.replace(/\$\(hitokoto1\)/, data.h1)
-    //     	.replace(/\$\(hitokoto2\)/, data.h2)
-    //     	.replace(/\$\(hitokoto3\)/, data.h3)
-    //     	.replace(/\$\(time\)/,`${ti.getMonth()+1}/${ti.getDate()} ${ti.getHours()}:${ti.getMinutes()}:${ti.getSeconds()}`);
-    //     res.status(200).setHeader('Content-Type', 'application/json').send(source);
-    // } else {
-        async.series([
-            function(callback) {
-                mslp.ping(4, host, port, 10000)
-                    .then(response => {
-                        callback(null, {
-                            status: '在线',
-                            online: `${response.players.online}/${response.players.max}`,
-                            playerlist: (() => {
-                                let playerlist = [];
-                                if (response.players.sample == undefined) return '';
-                                response.players.sample.forEach(player => {
-                                    playerlist.push(`${player.name}`);
-                                });
-                                return playerlist.join(', ');
-                            })()
-                        });
-                    })
-                    .catch(ignore => {
-                        callback(null, {
-                            status: '离线',
-                            online: '无数据'
-                        });
-                    });
-            }, hitokoto, hitokoto, hitokoto
-        ],
-            function(ignore, result) {
-                if (result[0].status == '在线') {
-                    let online = parseInt(result[0].online.split('/')[0]);
-                    if (online <= 0) {
-                        source = source.replace(/\$\(textlist\)/, '无玩家');
-                    } else if (online >= 2) {
-                        source = source.replace(/\$\(textlist\)/, '');
-                        source = source.replace(/\<\!\-\-\$\(showlist\)|\$\(showlist\)\-\-\>/g, '');
-                        source = source.replace(/\$\(playerlist\)/, result[0].playerlist);
-                    } else {
-                        source = source.replace(/\$\(textlist\)/, result[0].playerlist);
-                    }
+    // Main process
+    mongo.connect(mongouri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverApi: mongov.v1,
+    }, async (err, client) => {
+        if (err) {
+            res.send($error(err, "Please check the database uri!"));
+        } else {
+            const collection = client.db("peckotapi").collection("apiconfig");
+            const docs = await collection.findOne({ apiname: "PCL2HomePage" });
+            // rate limit
+            var limit = false;
+            if (null == docs) {
+                await collection.insertOne({ apiname: "PCL2HomePage" });
+                limit = false;
+            } else {
+                const lastupdate = docs.lastupdate;
+                if (lastupdate && docs.data) {
+                    if (time.getTime() - lastupdate >= interval) limit = false;
+                    else limit = true;
                 } else {
-                    source = source.replace(/\$\(textlist\)/, '无数据');
+                    limit = false;
                 }
-                source = source
-                    .replace(/\$\(status\)/, result[0].status)
-                	.replace(/\$\(online\)/, result[0].online)
-                	.replace(/\$\(hitokoto1\)/, result[1])
-                	.replace(/\$\(hitokoto2\)/, result[2])
-                	.replace(/\$\(hitokoto3\)/, result[3])
-                	.replace(/\$\(time\)/, time.toLocaleString('zh-CN', {
-                        timeZone: "Asia/Shanghai",
-                        hour12: false,
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit"
-                    }));
-                // res.setHeader('Set-Cookie', cookie.serialize('data', JSON.stringify({
-                //     ti: time.getTime(),
-                //     st: result[0].status,
-                //     ol: result[0].online,
-                //     pl: result[0].playerlist,
-                //     h1: result[1],
-                //     h2: result[2],
-                //     h3: result[3]
-                // }), {httpOnly: true}));
-                res.status(200).setHeader('Content-Type', 'application/json').send(source);
             }
-        );
-    // }
-    
+            // result
+            const info = limit ? docs.data : await serverinfo();
+            const hitokotos = [
+                await hitokoto(),
+                await hitokoto(),
+                await hitokoto(),
+            ];
+            await collection.updateOne({ apiname: "PCL2HomePage" }, {
+                $set: {
+                    apiname: "PCL2HomePage",
+                    lastupdate: time.getTime(),
+                    data: info,
+                }
+            });
+            source = placeholders(source, info, hitokotos, limit ? new Date(docs.lastupdate) : time);
+            res.status(200).setHeader("Content-Type", "application/json").send(source);
+        }
+        client.close();
+    });
+}
 
+// Set placeholders
+const placeholders = (source, info, hitokotos, time) => {
+    if (info.status == "在线") {
+        let online = parseInt(info.online.split("/")[0]);
+        if (online <= 0) {
+            source = source.replace(/\$\(textlist\)/, "无玩家");
+        } else if (online >= 2) {
+            source = source.replace(/\$\(textlist\)/, "");
+            source = source.replace(/\<\!\-\-\$\(showlist\)|\$\(showlist\)\-\-\>/g, "");
+            source = source.replace(/\$\(playerlist\)/, info.playerlist);
+        } else {
+            source = source.replace(/\$\(textlist\)/, info.playerlist);
+        }
+    } else {
+        source = source.replace(/\$\(textlist\)/, "无数据");
+    }
+    return source
+        .replace(/\$\(status\)/, info.status)
+        .replace(/\$\(online\)/, info.online)
+        .replace(/\$\(hitokoto1\)/, hitokotos[0])
+        .replace(/\$\(hitokoto2\)/, hitokotos[1])
+        .replace(/\$\(hitokoto3\)/, hitokotos[2])
+        .replace(/\$\(time\)/, time.toLocaleString("zh-CN", {
+            timeZone: "Asia/Shanghai",
+            hour12: false,
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        }));
+}
+
+// Get Minecraft server info
+const serverinfo = async () => {
+    var result = null;
+    await mslp.ping(4, host, port, 10000)
+        .then(response => {
+            result = {
+                status: "在线",
+                online: `${response.players.online}/${response.players.max}`,
+                playerlist: (() => {
+                    let playerlist = [];
+                    if (response.players.sample == undefined) return "";
+                    response.players.sample.forEach(player => {
+                        playerlist.push(`${player.name}`);
+                    });
+                    return playerlist.join(", ");
+                })()
+            };
+        })
+        .catch(ignore => result = { status: "离线", online: "无数据" });
+    return result;
+}
+
+// Get hitokoto
+const hitokoto = async () => {
+    var result = null;
+    await get(hitonode == "INTERL" ? "https://international.v1.hitokoto.cn" : "https://v1.hitokoto.cn")
+        .then(({ data }) => result = data.hitokoto)
+        .catch(ignore => result = "Error: 一言语录获取失败");
+    return result;
 }
