@@ -90,6 +90,7 @@ const placeholders = (source, info, hitokotos, time) => {
     return source
         .replace(/\$\(status\)/, info.status)
         .replace(/\$\(online\)/, info.online)
+        .replace(/\$\(broadcast\)/, "暂时没有公告...")
         .replace(/\$\(hitokoto1\)/, hitokotos[0])
         .replace(/\$\(hitokoto2\)/, hitokotos[1])
         .replace(/\$\(hitokoto3\)/, hitokotos[2])
