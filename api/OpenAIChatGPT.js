@@ -68,8 +68,8 @@ export default async (req, res) => {
                     response.data.choices[0].text.substring(1) :
                     response.data.choices[0].text;
             saveDialogue(user, prompt.concat(result));
-            if (type == "text") res.send(result == "" ? head : result);
-            else res.send($info(result == "" ? head : result));
+            if (type == "text") res.send(result);
+            else res.send($info(result));
         }
         client.close();
     });
