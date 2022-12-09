@@ -3,13 +3,13 @@ import { error as $error } from "../.lib/API";
 import { get } from "axios";
 import { readFileSync } from "fs";
 import { MinecraftServerListPing as mslp } from "minecraft-status";
-import { MongoClient as mongo, ServerApiVersion as mongov } from "mongodb";
+import { MongoClient } from "mongodb";
 
 // Data
 const hitonode = process.env.PCL2_HITOKOTO_NODE;
 const host = process.env.PECKOTMC_HOST;
 const interval = process.env.PCL2_INTERVAL;
-const mongouri = process.env.MONGODB_URI;
+const mongocl = new MongoClient(process.env.MONGODB_URI).db("peckotapi").collection("apiconfig");
 const port = process.env.PECKOTMC_PORT;
 const time = new Date();
 
@@ -26,49 +26,37 @@ export default async (req, res) => {
     }
 
     // Main process
-    mongo.connect(mongouri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        serverApi: mongov.v1,
-    }, async (err, client) => {
-        if (err) {
-            res.send($error(err, "Please check the database uri!"));
+    const docs = await mongocl.findOne({ apiname: "PCL2HomePage" });
+    // rate limit
+    var limit = false;
+    if (null == docs) {
+        await mongocl.insertOne({ apiname: "PCL2HomePage" });
+        limit = false;
+    } else {
+        const lastupdate = docs.lastupdate;
+        if (lastupdate && docs.data) {
+            if (time.getTime() - lastupdate >= interval) limit = false;
+            else limit = true;
         } else {
-            const collection = client.db("peckotapi").collection("apiconfig");
-            const docs = await collection.findOne({ apiname: "PCL2HomePage" });
-            // rate limit
-            var limit = false;
-            if (null == docs) {
-                await collection.insertOne({ apiname: "PCL2HomePage" });
-                limit = false;
-            } else {
-                const lastupdate = docs.lastupdate;
-                if (lastupdate && docs.data) {
-                    if (time.getTime() - lastupdate >= interval) limit = false;
-                    else limit = true;
-                } else {
-                    limit = false;
-                }
-            }
-            // result
-            const info = limit ? docs.data : await serverinfo();
-            const hitokotos = [
-                await hitokoto(),
-                await hitokoto(),
-                await hitokoto(),
-            ];
-            await collection.updateOne({ apiname: "PCL2HomePage" }, {
-                $set: {
-                    apiname: "PCL2HomePage",
-                    lastupdate: time.getTime(),
-                    data: info,
-                }
-            });
-            source = placeholders(source, info, hitokotos, limit ? new Date(docs.lastupdate) : time);
-            res.status(200).setHeader("Content-Type", "application/json").send(source);
+            limit = false;
         }
-        client.close();
+    }
+    // result
+    const info = limit ? docs.data : await serverinfo();
+    const hitokotos = [
+        await hitokoto(),
+        await hitokoto(),
+        await hitokoto(),
+    ];
+    await collection.updateOne({ apiname: "PCL2HomePage" }, {
+        $set: {
+            apiname: "PCL2HomePage",
+            lastupdate: time.getTime(),
+            data: info,
+        }
     });
+    source = placeholders(source, info, hitokotos, limit ? new Date(docs.lastupdate) : time);
+    res.status(200).setHeader("Content-Type", "application/json").send(source);
 }
 
 // Set placeholders
