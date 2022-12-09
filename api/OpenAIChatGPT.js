@@ -22,18 +22,19 @@ export default async (req, res) => {
         ask = head,
         type = "json",
     } = req.query;
+    const prompt = decodeURIComponent(ask);
 
     // Main process
     res.setHeader("Content-Type", "application/json");
     // if reset operation
     if (
-        ask.trim().startsWith("清空语料") ||
-        ask.trim().startsWith("清除语料") ||
-        ask.trim().startsWith("重置语料") ||
-        ask.trim().startsWith("清空会话") ||
-        ask.trim().startsWith("清除会话") ||
-        ask.trim().startsWith("重置会话") ||
-        ask.trim().startsWith("呜啦啦~欧若拉失忆")
+        prompt.trim().startsWith("清空语料") ||
+        prompt.trim().startsWith("清除语料") ||
+        prompt.trim().startsWith("重置语料") ||
+        prompt.trim().startsWith("清空会话") ||
+        prompt.trim().startsWith("清除会话") ||
+        prompt.trim().startsWith("重置会话") ||
+        prompt.trim().startsWith("呜啦啦~欧若拉失忆")
     ) {
         deleteDialogue(user);
         if (type == "text") return res.send(reset);
@@ -50,7 +51,7 @@ export default async (req, res) => {
         } else {
             const collection = client.db("peckotapi").collection("openaichatgpt");
             const docs = await collection.findOne({ id: user });
-            const dialogue = (null != docs ? docs.dia.concat(ask) : ask)
+            const dialogue = (null != docs ? docs.dia.concat(prompt) : prompt)
                 .concat(symbols[Math.floor(Math.random() * symbols.length)]);
             const response = await openai.createCompletion({
                 model: "text-davinci-003",
@@ -66,7 +67,7 @@ export default async (req, res) => {
                 response.data.choices[0].text.startsWith("\n") ?
                     response.data.choices[0].text.substring(1) :
                     response.data.choices[0].text;
-            saveDialogue(user, ask.concat(result));
+            saveDialogue(user, prompt.concat(result));
             if (type == "text") res.send(result == "" ? head : result);
             else res.send($info(result == "" ? head : result));
         }
