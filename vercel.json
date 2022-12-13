@@ -2,8 +2,8 @@
   "version": 2,
   "routes": [
     {
-      "src": "/(o|O)(p|P)(e|E)(n|N)(a|A)(i|I)(/.*)?",
-      "dest": "https://api.openai.com$7"
+      "src": "/rp/chat.openai.com(/.*)?",
+      "dest": "https://chat.openai.com$7"
     },
     {
       "src": "/(.*)",

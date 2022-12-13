@@ -5,6 +5,7 @@ import { Configuration as openconfig, OpenAIApi as openapi } from "openai";
 
 // Data
 // required envs: OPENAI_ORGANIZATION, OPENAI_API_KEY, MONGODB_URI
+const authorization = process.env.AUTHORIZATION;
 const conf = new openconfig({
     apiKey: process.env.OPENAI_API_KEY,
     organization: process.env.OPENAI_ORGANIZATION,
@@ -19,11 +20,15 @@ export default async (req, res) => {
     // Input arguments
     res.setHeader("Content-Type", "application/json");
     const {
+        auth = "Unauthorized",
         user = "__user__",
         ask = head,
         type = "json",
     } = req.query;
     const prompt = decodeURIComponent(ask);
+
+    // Authorization
+    if (auth != authorization) return res.status(401).send($error({ message: "Unauthorized" }));
 
     // Main process
     try {
