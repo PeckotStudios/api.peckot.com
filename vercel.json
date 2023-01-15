@@ -2,8 +2,8 @@
   "version": 2,
   "routes": [
     {
-      "src": "/rp/chat.openai.com(/.*)?",
-      "dest": "https://chat.openai.com$1"
+      "src": "/LinkJump/101984499.json",
+      "dest": "/101984499.json"
     },
     {
       "src": "/(.*)",
