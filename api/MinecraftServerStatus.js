@@ -40,7 +40,7 @@ export default (req, res) => {
                 .catch(error => res.send($error(error, "Confirm whether your parameters are incorrect or your server is offline.")));
             break;
         case "query":
-            MinecraftQuery.fullQuery(host, port, timeout)
+            MinecraftQuery.fullQuery(host, port, 3000)
                 .then(response => res.send($info(response)))
                 .catch(error => res.send($error(error, "Confirm whether your parameters are incorrect or your server is offline.")));
         default:
