@@ -5,6 +5,10 @@
       "src": "/LinkJump/101984499.json",
       "dest": "/101984499.json"
     },
+	{
+	  "src": "/api.openai.com/(.*)",
+	  "dest": "https://api.openai.com/$1"
+	},
     {
       "src": "/(.*)",
       "dest": "/api/$1"
