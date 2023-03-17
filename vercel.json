@@ -6,8 +6,8 @@
       "dest": "/101984499.json"
     },
 	{
-	  "src": "/api.openai.com/(.*)",
-	  "dest": "https://api.openai.com/$1"
+	  "src": "/api.openai.com(.*)",
+	  "dest": "https://api.openai.com$1"
 	},
     {
       "src": "/(.*)",
