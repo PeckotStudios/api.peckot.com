@@ -10,7 +10,7 @@ export default (req, res) => {
     time = null,
   } = req.query;
 
-  const _keyword = decodeURIComponent(keyword);
+  const _keyword = encodeURIComponent(keyword);
 
   // Main process
   res.setHeader("Content-Type", "application/json")
