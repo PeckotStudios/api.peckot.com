@@ -5,14 +5,16 @@ import axios from "axios";
 export default (req, res) => {
   // Input arguments
   const {
-    keyword = 'Peckot API',
+    keyword = encodeURIComponent('Peckot API'),
     amount = 5,
     time = null,
   } = req.query;
 
+  const _keyword = decodeURIComponent(keyword);
+
   // Main process
   res.setHeader("Content-Type", "application/json")
-  getResults(keyword, amount, time)
+  getResults(_keyword, amount, time)
     .then(data => res.status(200).send($info(data)))
     .catch(error => res.status(400).send($error(error)));
 }
