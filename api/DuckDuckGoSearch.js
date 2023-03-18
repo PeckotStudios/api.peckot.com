@@ -5,7 +5,9 @@ const { JSDOM } = require('jsdom');
 export default (req, res) => {
   // Input arguments
   const {
-    query
+    key = 'Peckot API',
+    num = 5,
+
   } = req.query;
 
   // Main process
@@ -18,9 +20,15 @@ export default (req, res) => {
 
 // 获取HTML页面内容
 async function getHtml(keyword) {
-  const url = `http://html.duckduckgo.com/html/?q=${keyword}`;
-  const { data } = await axios.get(url);
-  return data;
+  const url = 'http://html.duckduckgo.com/html/';
+  const data = new URLSearchParams();
+  data.append('q', keyword);
+  const { data: html } = await axios({
+    method: 'post',
+    url: url,
+    data: data,
+  });
+  return html;
 }
 
 // 解析HTML页面内容，返回搜索结果的数组
@@ -30,7 +38,8 @@ function parseHtml(html) {
   const result_bodies = dom.window.document.querySelectorAll(".result__body");
   result_bodies.forEach(item => {
     const title = item.querySelector(".result__a").textContent;
-    const link = decodeURIComponent(item.querySelector(".result__a").href.substring("//duckduckgo.com/l/?uddg=".length));
+    //const link = decodeURIComponent(item.querySelector(".result__a").href.substring("//duckduckgo.com/l/?uddg=".length));
+    const link = item.querySelector(".result__a").href;
     const snippet = item.querySelector(".result__snippet").textContent;
     final_results.push({
       title: title,
