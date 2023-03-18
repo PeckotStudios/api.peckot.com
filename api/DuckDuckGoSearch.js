@@ -9,8 +9,6 @@ export default (req, res) => {
   } = req.query;
 
   // Main process
-
-  // 示例代码，调用getResults函数搜索“nodejs”相关内容，并输出结果
   res.setHeader("Content-Type", "application/json")
   getResults(query)
     .then(data => res.status(200).send($info(data)))
@@ -43,10 +41,9 @@ function parseHtml(html) {
   return Promise.resolve(final_results);
 }
 
-// 获取搜索结果并解析，返回格式化后的JSON字符串
+// 获取搜索结果并解析
 async function getResults(keyword) {
   const html = await getHtml(keyword);
   const resultsArray = await parseHtml(html);
-  const jsonString = JSON.stringify(resultsArray, null, 4);
-  return jsonString;
+  return resultsArray;
 }
