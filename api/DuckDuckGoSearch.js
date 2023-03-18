@@ -14,9 +14,13 @@ export default (req, res) => {
 
   // Main process
   res.setHeader("Content-Type", "application/json")
-  getResults(_keyword, amount, time)
+  getBackupResults(_keyword, amount, time)
     .then(data => res.status(200).send($info(data)))
-    .catch(error => res.status(400).send($error(error)));
+    .catch(error => {
+      getResults(_keyword, amount, time)
+        .then(data => res.status(200).send($info(data, '[BackupNode] WARNING: ' + error.message)))
+        .catch(error => res.status(400).send($error(error)))
+    });
 }
 
 // 获取HTML页面内容
@@ -55,6 +59,14 @@ function parseHtml(html) {
 async function getResults(keyword, amount, time) {
   const html = await getHtml(keyword, time);
   const resultsArray = await parseHtml(html);
+  const mergedArray = [].concat(...resultsArray.slice(0, amount));
+  return Promise.resolve(mergedArray);
+}
+
+// 备用接口
+async function getBackupResults(keyword, amount, time) {
+  const data = await axios.get(`https://ddg-api.herokuapp.com/search?query=${keyword}&time_range=${time}`);
+  const resultsArray = JSON.parse(data);
   const mergedArray = [].concat(...resultsArray.slice(0, amount));
   return Promise.resolve(mergedArray);
 }

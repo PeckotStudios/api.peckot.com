@@ -2,10 +2,10 @@
  * Includes some common functions used in APIs.
  * @author Pectics
  */
-export function info(data) {
+export function info(data, message = 'Data request succeeded!') {
     return JSON.stringify({
         code: 200,
-        message: 'Data request succeeded!',
+        message: message,
         data: data,
     }, null, 4);
 }
