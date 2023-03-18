@@ -11,9 +11,10 @@ export default (req, res) => {
   // Main process
 
   // 示例代码，调用getResults函数搜索“nodejs”相关内容，并输出结果
+  res.setHeader("Content-Type", "application/json")
   getResults(query)
-    .then(data => $info(data))
-    .catch(error => $error(error));
+    .then(data => res.status(200).send($info(data)))
+    .catch(error => res.status(400).send($error(error)));
 
 }
 
