@@ -30,8 +30,7 @@ function parseHtml(html) {
   const result_bodies = dom.window.document.querySelectorAll(".result__body");
   result_bodies.forEach(item => {
     const title = item.querySelector(".result__a").textContent;
-    const link = decodeURIComponent(
-      new String(item.querySelector(".result__a").href).subString("//duckduckgo.com/l/?uddg=".length));
+    const link = decodeURIComponent(item.querySelector(".result__a").href.substring("//duckduckgo.com/l/?uddg=".length));
     const snippet = item.querySelector(".result__snippet").textContent;
     final_results.push({
       title: title,
