@@ -29,7 +29,7 @@ type readCloser struct {
 	s string
 }
 
-func handleRequest(w http.ResponseWriter, r *http.Request) {
+func Handler(w http.ResponseWriter, r *http.Request) {
     router := gin.Default()
 
     router.GET("/ping", func(c *gin.Context) {
