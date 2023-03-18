@@ -1,6 +1,7 @@
 import { info as $info, error as $error } from "../.lib/API";
-const axios = require('axios');
-const { JSDOM } = require('jsdom');
+import { URLSearchParams } from "url";
+import { JSDOM } from "jsdom";
+import * as axios from "axios";
 
 export default (req, res) => {
   // Input arguments
@@ -23,7 +24,7 @@ async function getHtml(keyword) {
   const data = new URLSearchParams();
   data.append('q', keyword);
   const { data: html } = await axios({
-    method: 'post',
+    method: 'POST',
     url: url,
     data: data,
   });
