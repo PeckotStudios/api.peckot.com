@@ -12,10 +12,13 @@
     "axios": "^0.27.2",
     "cookie": "^0.5.0",
     "http-proxy-middleware": "^2.0.6",
+    "https": "^1.0.0",
     "minecraft-status": "^1.1.0",
     "mongodb": "^4.12.1",
+    "node-fetch": "^3.3.1",
     "openai": "^3.1.0",
     "path-pattern": "^2.1.1",
+    "soup": "^0.1.3",
     "ws": "^8.11.0"
   }
 }
