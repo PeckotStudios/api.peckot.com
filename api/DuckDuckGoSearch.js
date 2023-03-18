@@ -65,7 +65,7 @@ async function getResults(keyword, amount, time) {
 
 // 备用接口
 async function getBackupResults(keyword, amount, time) {
-  const data = await axios.get(`https://ddg-api.herokuapp.com/search?query=${keyword}&time_range=${time}`);
+  const { data } = await axios.get(`https://ddg-api.herokuapp.com/search?query=${keyword}&time_range=${time}`);
   const resultsArray = JSON.parse(data);
   const mergedArray = [].concat(...resultsArray.slice(0, amount));
   return Promise.resolve(mergedArray);
