@@ -7,12 +7,11 @@ export default (req, res) => {
   const {
     key = 'Peckot API',
     num = 5,
-
   } = req.query;
 
   // Main process
   res.setHeader("Content-Type", "application/json")
-  getResults(query)
+  getResults(key)
     .then(data => res.status(200).send($info(data)))
     .catch(error => res.status(400).send($error(error)));
 
