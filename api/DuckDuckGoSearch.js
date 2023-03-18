@@ -25,7 +25,7 @@ async function getHtml(keyword, time) {
     case "year": time = "y"; break;
     case "month": time = "m"; break;
     case "week": time = "w"; break;
-    case "d": time = "d"; break;
+    case "day": time = "d"; break;
     default: time = ""; break;
   }
   const url = `http://html.duckduckgo.com/html/?q=${keyword}&df=${time}`;
