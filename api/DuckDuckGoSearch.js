@@ -32,7 +32,7 @@ async function getHtml(keyword, time) {
     case "day": time = "d"; break;
     default: time = ""; break;
   }
-  const url = `http://html.duckduckgo.com/html/?q=${keyword}&df=${time}`;
+  const url = `https://html.duckduckgo.com/html/?q=${keyword}&df=${time}`;
   const { data } = await axios.get(url);
   return data;
 }
@@ -66,7 +66,7 @@ async function getResults(keyword, amount, time) {
 // 备用接口
 async function getBackupResults(keyword, amount, time) {
   const { data } = await axios.get(`https://ddg-api.herokuapp.com/search?query=${keyword}&time_range=${time}`);
-  console.info(data);
+  console.info(new String(data).substring(0, 50));
   const resultsArray = JSON.parse(data);
   const mergedArray = [].concat(...resultsArray.slice(0, amount));
   return Promise.resolve(mergedArray);
