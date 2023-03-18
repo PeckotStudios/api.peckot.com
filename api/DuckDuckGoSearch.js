@@ -1,7 +1,7 @@
 import { info as $info, error as $error } from "../.lib/API";
 import { URLSearchParams } from "url";
 import { JSDOM } from "jsdom";
-import * as axios from "axios";
+import axios from 'axios';
 
 export default (req, res) => {
   // Input arguments
