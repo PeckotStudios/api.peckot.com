@@ -1,5 +1,11 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "api/DuckDuckGoSearch/main.go",
+      "use": "@vercel/go"
+    }
+  ],
   "routes": [
     {
       "src": "/LinkJump/101984499.json",
