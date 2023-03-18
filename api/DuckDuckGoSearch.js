@@ -1,3 +1,21 @@
+/**
+ * Get search results from DuckDuckGo or backup API
+ * Description: This endpoint returns search results based on the provided keyword and time range.
+ * Request: <Type> (Required) [Optional = {DefaultValue}]
+ *   <string>  [keyword = "Peckot API"] - keyword to search for
+ *   <integer> [amount = 5]             - number of search results to return
+ *   <string>  [time = null]            - time range to search within ("year", "month", "week", or "day"), null for all time
+ * Response: <Type> [Key] {Condition}
+ *   <integer> [code]    {None}         - HTTP status code
+ *   <string>  [message] {None}         - message regarding response status
+ *   <string>  [advice]  {Fail}         - debug advice in case of error
+ *   <array>   [data]    {Seccess}      - array of search result objects, each containing a title, link, and snippet of the search result
+ * @author Pectics
+ * @param {*} req - Express request object
+ * @param {*} res - Express response object
+ */
+
+// Dependencies
 import { info as $info, error as $error } from "../.lib/API";
 import { JSDOM } from "jsdom";
 import axios from "axios";
@@ -9,21 +27,20 @@ export default (req, res) => {
     amount = 5,
     time = null,
   } = req.query;
-
   const _keyword = encodeURIComponent(keyword);
 
   // Main process
   res.setHeader("Content-Type", "application/json")
   getBackupResults(_keyword, amount, time)
-    .then(data => res.status(200).send($info(data)))
+    .then(data => res.status(200).send($info({ results: data })))
     .catch(error => {
       getResults(_keyword, amount, time)
-        .then(data => res.status(200).send($info(data, '[BackupNode] WARNING: ' + error.message)))
+        .then(data => res.status(200).send($info({ results: data }, '[BackupNode] WARNING: ' + error.message)))
         .catch(error => res.status(400).send($error(error)))
     });
 }
 
-// 获取HTML页面内容
+// Get html content
 async function getHtml(keyword, time) {
   switch (time) {
     case "year": time = "y"; break;
@@ -37,7 +54,7 @@ async function getHtml(keyword, time) {
   return data;
 }
 
-// 解析HTML页面内容，返回搜索结果的数组
+// Parse html content to results content
 function parseHtml(html) {
   const finalResults = [];
   const dom = new JSDOM(html);
@@ -55,7 +72,7 @@ function parseHtml(html) {
   return Promise.resolve(finalResults);
 }
 
-// 获取搜索结果并解析
+// Local crawl
 async function getResults(keyword, amount, time) {
   const html = await getHtml(keyword, time);
   const resultsArray = await parseHtml(html);
@@ -63,7 +80,7 @@ async function getResults(keyword, amount, time) {
   return Promise.resolve(mergedArray);
 }
 
-// 备用接口
+// Backup node crawl
 async function getBackupResults(keyword, amount, time) {
   const { data } = await axios.get(`https://ddg-api.herokuapp.com/search?query=${keyword}&time_range=${time}`);
   const mergedArray = [].concat(...data.slice(0, amount));

@@ -1,3 +1,19 @@
+/**
+ * PCL2HomePage API
+ * Description: This API provides functionality for handling requests and responses to the PCL2HomePage.
+ * Dependencies: This module relies on external dependencies such as mongodb, axios, and minecraft-server-status; make sure they are properly installed via package.json.
+ * Request: <Type> (Required) [Optional = {DefaultValue}]
+ *   N/A
+ * Response: <Type> [Key] {Condition}
+ *   <integer> [code]    {None}     - HTTP status code
+ *   <string>  [message] {None}     - message regarding response status
+ *   <string>  [advice]  {Fail}     - debug advice in case of error
+ *   <object>  [data]    {Success}  - response data, containing information about the specified Minecraft server
+ * @author Pectics
+ * @param {*} req - Express request object
+ * @param {*} res - Express response object
+ */
+
 // Dependencies
 import { error as $error } from "../.lib/API";
 import { get } from "axios";
@@ -14,7 +30,6 @@ const port = process.env.PECKOTMC_PORT;
 const time = new Date();
 
 export default async (req, res) => {
-
     // Preprocess
     res.setHeader("Content-Type", "application/json");
     var source = new String();

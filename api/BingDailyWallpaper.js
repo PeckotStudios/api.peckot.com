@@ -1,21 +1,21 @@
 /**
- * Get api: Bing daily wallpapers
- * Description: Refer to docs.peckot.com for more.
+ * Get daily wallpapers from Bing API
+ * Description: This API returns daily wallpapers from Bing, including a range of available resolutions.
  * Request: <Type> (Required) [Optional = {DefaultValue}]
- *   <string>  [area = "cn"]        - from where to get wallpapers
- *   <string>  [type = "json"]      - feedback format, json and image allowed
- *   <string>  [node = "default"]   - whether to use www.bing.com or cn.bing.com
- *   <string>  [size = "1920x1080"] - size of wallpapers, 1920x1080 1920x1200 1366x768 etc. allowed
- *   <integer> [dateback = 0]       - how many days back to start getting wallpapers
- *   <integer> [num = 1]            - how many wallpapers you want to get
+ *   <string>  [area = "cn"]        - location to retrieve wallpapers from (e.g. "cn" for China, "us" for United States)
+ *   <string>  [type = "json"]      - format of feedback, allowed values are "json" and "image"
+ *   <string>  [node = "default"]   - which Bing subdomain to use for retrieval, allowed values are "default" and "interl"
+ *   <string>  [size = "1920x1080"] - size of the wallpaper to retrieve, allowed values include "1920x1080", "1920x1200", "1366x768", etc.
+ *   <integer> [dateback = 0]       - number of days to go back to retrieve previous daily wallpapers, 0 for current day only
+ *   <integer> [num = 1]            - number of wallpapers to retrieve (up to 8 at a time)
  * Response: <Type> [Key] {Condition}
- *   <integer> [code]    {None}     - web status code
- *   <string>  [message] {None}     - intro messages
- *   <string>  [advice]  {Fail}     - error debug advice
- *   <object>  [data]    {Seccess}  - response data
+ *   <integer> [code]    {None}     - HTTP status code
+ *   <string>  [message] {None}     - message regarding response status
+ *   <string>  [advice]  {Fail}     - debug advice in case of error
+ *   <object>  [data]    {Success}  - response data, containing an array of wallpaper objects, each containing a URL and associated metadata
  * @author Pectics
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req - Express request object
+ * @param {*} res - Express response object
  */
 
 // Dependencies
