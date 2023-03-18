@@ -1,26 +1,51 @@
-import fetch from 'node-fetch';
-const DDG_BASE_URL = 'https://api.duckduckgo.com/';
+import { info as $info, error as $error } from "../.lib/API";
+const axios = require('axios');
+const { JSDOM } = require('jsdom');
 
-export default async (req, res) => {
-  const query = req.query.q;
-  if (query === undefined) {
-    res.status(400).send('Missing search query parameter.');
-    return;
-  }
-  
-  const response = await fetch(`${DDG_BASE_URL}?q=${query}&format=json`);
-  const data = await response.json();
-  
-  if(data.Type === 'E') {
-    res.status(404).send('No results found.');
-    return;
-  }
+export default (req, res) => {
+  // Input arguments
+  const {
+    query
+  } = req.query;
 
-  const results = data.RelatedTopics.map((result) => ({
-    title: result.Text,
-    url: result.FirstURL,
-    description: result.Result
-  }));
+  // Main process
 
-  res.status(200).send(results);
-};
+  // 示例代码，调用getResults函数搜索“nodejs”相关内容，并输出结果
+  getResults(query)
+    .then(data => $info(data))
+    .catch(error => $error(error));
+
+}
+
+// 获取HTML页面内容
+async function getHtml(keyword) {
+  const url = `http://html.duckduckgo.com/html/?q=${keyword}`;
+  const { data } = await axios.get(url);
+  return data;
+}
+
+// 解析HTML页面内容，返回搜索结果的数组
+function parseHtml(html) {
+  const final_results = [];
+  const dom = new JSDOM(html);
+  const result_bodies = dom.window.document.querySelectorAll(".result__body");
+  result_bodies.forEach(item => {
+    const title = item.querySelector(".result__a").textContent;
+    const link = item.querySelector(".result__a").href;
+    const snippet = item.querySelector(".result__snippet").textContent;
+    final_results.push({
+      Title: title,
+      Link: link,
+      Snippet: snippet
+    });
+  });
+  return Promise.resolve(final_results);
+}
+
+// 获取搜索结果并解析，返回格式化后的JSON字符串
+async function getResults(keyword) {
+  const html = await getHtml(keyword);
+  const resultsArray = await parseHtml(html);
+  const jsonString = JSON.stringify(resultsArray, null, 4);
+  return jsonString;
+}
