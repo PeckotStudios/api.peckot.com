@@ -68,7 +68,7 @@ export default async (req, res) => {
             };
             bottlesCollection.insertOne(throwing)
                 .then(result => {
-                    configCollection.replaceOne({}, { bottles: existingBottles.push(throwing.i) })
+                    configCollection.replaceOne({}, { amount: historyAmount + 1, bottles: existingBottles.push(throwing.i) })
                         .then(ignored =>
                             $json_info(res, 201, { bottles: db2re(throwing) },
                                 `Successfully throw the bottle: ${result.insertedId}`))
