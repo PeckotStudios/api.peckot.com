@@ -38,8 +38,8 @@ export default async (req, res) => {
     const configCollection = mongoClient.collection("config");
     const bottlesCollection = mongoClient.collection("bottles");
     const configDocument = await configCollection.findOne();
-    const existingBottles = configDocument.bottles;
-    const historyAmount = configDocument.amount;
+    const existingBottles = configDocument && configDocument.bottles ? configDocument.bottles.map(n => Number.parseInt(n, 10)) : [];
+    const historyAmount = configDocument && configDocument.amount ? configDocument.amount : 0;
 
     switch (operation) {
         case "throw":
@@ -79,7 +79,9 @@ export default async (req, res) => {
             break;
         case "pick":
         default:
-            const picking = db2re(await bottlesCollection.findOne({ id: existingBottles[randomInt(existingBottles.length)] }));
+            const picking = db2re(await bottlesCollection.findOne({
+                id: existingBottles[randomInt(existingBottles.length)]
+            }, { _id: 0 }));
             $json_info(res, 200, {
                 bottles: [picking],
             });
