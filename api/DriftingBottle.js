@@ -34,10 +34,12 @@ export default async (req, res) => {
     } = req.query;
 
     // Main Process
-    const mongo = new MongoClient(process.env.MONGODB_URI).db("drifting_bottle");
-    const config = mongo.collection("config");
-    const bottles = mongo.collection("bottles");
-    const amount = (await config.findOne()).amount;
+    const mongoClient = new MongoClient(process.env.MONGODB_URI).db("drifting_bottle");
+    const configCollection = mongoClient.collection("config");
+    const bottlesCollection = mongoClient.collection("bottles");
+    const configDocument = await configCollection.findOne();
+    const existingBottles = configDocument.bottles;
+    const historyAmount = configDocument.amount;
 
     switch (operation) {
         case "throw":
@@ -56,7 +58,7 @@ export default async (req, res) => {
                 return;
             }
             const throwing = {
-                i: 100000 + amount,
+                i: 100000 + historyAmount,
                 t: new Date().getTime(),
                 c: content,
                 f: {
@@ -64,9 +66,9 @@ export default async (req, res) => {
                     t: thrower,
                 },
             };
-            bottles.insertOne(throwing)
+            bottlesCollection.insertOne(throwing)
                 .then(result => {
-                    config.replaceOne({}, { amount: amount + 1 })
+                    configCollection.replaceOne({}, { bottles: existingBottles.push(throwing.i) })
                         .then(ignored =>
                             $json_info(res, 201, { bottles: db2re(throwing) },
                                 `Successfully throw the bottle: ${result.insertedId}`))
@@ -76,7 +78,7 @@ export default async (req, res) => {
             break;
         case "pick":
         default:
-            const picking = db2re(await bottles.findOne({ id: 100000 + randomInt(amount) }));
+            const picking = db2re(await bottlesCollection.findOne({ id: existingBottles[randomInt(existingBottles.length)] }));
             $json_info(res, 200, {
                 bottles: [picking],
             });
