@@ -79,8 +79,9 @@ export default async (req, res) => {
             break;
         case "pick":
         default:
+            console.log(existingBottles[randomInt(existingBottles.length)])
             const picking = db2re(await bottlesCollection.findOne({
-                id: existingBottles[randomInt(existingBottles.length)]
+                i: existingBottles[randomInt(existingBottles.length)]
             }, { _id: 0 }));
             $json_info(res, 200, {
                 bottles: [picking],
