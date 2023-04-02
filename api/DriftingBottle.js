@@ -42,6 +42,35 @@ export default async (req, res) => {
     const historyAmount = configDocument && configDocument.amount ? configDocument.amount : 0;
 
     switch (operation) {
+        case "remove":
+            if (new String(req.headers.authorization).replace(/Bearer pkt-/, "").trim() != process.env.ADMIN_KEY) {
+                $json_error(res, 403, "No permission!");
+                return;
+            }
+            var { filter } = req.query;
+            if (!filter) {
+                $json_error(res, 400, "Invalid argument `filter` given!");
+                return;
+            }
+            filter = JSON.parse(filter);
+            const removing = (await bottlesCollection.find(filter, { _id: 0 }).toArray());
+            var removedBottles = existingBottles;
+            removing.forEach(b => {
+                const i = removedBottles.indexOf(b.i);
+                removedBottles = removedBottles.slice(0, i).concat(removedBottles.slice(i+1))
+            });
+            bottlesCollection.deleteMany(filter)
+                .then(result => {
+                    configCollection.findOneAndReplace({}, { amount: historyAmount, bottles: removedBottles })
+                        .then(ignored => {
+                            if (result.deletedCount == 0) $json_info(res, 200, undefined, "Did not match any bottles.");
+                            else $json_info(res, 200, { bottles: removing.map(n => db2re(n)) },
+                                `Successfully remove ${result.deletedCount} bottle${result.deletedCount == 1 ? "" : "s"}!`)
+                        })
+                        .catch(error => $json_error(res, 500, error))
+                })
+                .catch(error => $json_error(res, 500, error));
+            break;
         case "throw":
             var { from, content, platform, thrower } = req.query;
             from = JSON.parse(from ? from : "{}")
