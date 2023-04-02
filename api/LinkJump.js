@@ -1,5 +1,6 @@
 /**
  * Redirect to provided URL
+ * RequireAuthorize: true
  * Description: This endpoint takes a URL as input and redirects the user to that URL.
  * Request: <Type> (Required) [Optional = {DefaultValue}]
  *   <string> [url = "https://api.peckot.com/"] - the URL to redirect to
@@ -10,7 +11,15 @@
  * @param {*} res - Express response object
  */
 
-export default (req, res) => {
+import { $authorize, $json_error } from "../.lib/API";
+
+export default async (req, res) => {
+    // Authorization
+    if (!(await $authorize("LinkJump", req.headers.authorization))) {
+        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization parameters.");
+        return;
+    }
+    
     // Input arguments
     const {
         url = encodeURIComponent("https://api.peckot.com/"),

@@ -1,5 +1,6 @@
 /**
  * Minecraft Server Status Checker
+ * RequireAuthorize: true
  * Description: This API provides functionality for checking the status of a Minecraft server, allowing for various query protocols and response formats.
  * Dependencies: This module relies on external dependencies MinecraftServerListPing and MinecraftQuery; make sure to install them via package.json.
  * Request: <Type> (Required) [Optional = {DefaultValue}]
@@ -18,10 +19,16 @@
  */
 
 // Dependencies
-import { info as $info, error as $error } from "../.lib/API";
+import { $authorize, $json_error, $json_info } from "../.lib/API";
 import { MinecraftServerListPing, MinecraftQuery } from "minecraft-status";
 
-export default (req, res) => {
+export default async (req, res) => {
+    // Authorization
+    if (!(await $authorize("MinecraftServerStatus", req.headers.authorization))) {
+        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization parameters.");
+        return;
+    }
+    
     // Input arguments
     const {
         host = null,
@@ -32,7 +39,7 @@ export default (req, res) => {
 
     // Arguments process
     if (null == host) {
-        res.send($error({ message: "ArgumentError: Empty host support!" }, "Confirm whether your parameters are incorrect"));
+        $json_error(res, 400, "ArgumentError: Empty host support!", "Confirm whether your parameters are incorrect");
         return;
     }
     var _host = host.toLowerCase();
@@ -41,31 +48,32 @@ export default (req, res) => {
     var _protocol = protocol >= 0 && protocol <= 114514 ? protocol : 4;
 
     // Main process
-    res.setHeader("Content-Type", "application/json");
+    const err = (error) => $json_error(res, 502, error, "Confirm whether your parameters are incorrect or your server is offline.");
+    const inf = (response) => $json_info(res, 200, response);
     switch (_method) {
         case "ping16":
             MinecraftServerListPing.ping16(_protocol, _host, _port, 3000)
-                .then(response => res.send($info(response)))
-                .catch(error => res.send($error(error, "Confirm whether your parameters are incorrect or your server is offline.")));
+                .then(response => inf(response))
+                .catch(error => err(error));
             break;
         case "ping15":
             MinecraftServerListPing.ping15(_host, _port, 3000)
-                .then(response => res.send($info(response)))
-                .catch(error => res.send($error(error, "Confirm whether your parameters are incorrect or your server is offline.")));
+                .then(response => inf(response))
+                .catch(error => err(error));
             break;
         case "ping13":
             MinecraftServerListPing.ping13(_host, _port, 3000)
-                .then(response => res.send($info(response)))
-                .catch(error => res.send($error(error, "Confirm whether your parameters are incorrect or your server is offline.")));
+                .then(response => inf(response))
+                .catch(error => err(error));
             break;
         case "query":
             MinecraftQuery.fullQuery(host, port, 3000)
-                .then(response => res.send($info(response)))
-                .catch(error => res.send($error(error, "Confirm whether your parameters are incorrect or your server is offline.")));
+                .then(response => inf(response))
+                .catch(error => err(error));
         default:
             MinecraftServerListPing.ping(_protocol, _host, _port, 3000)
-                .then(response => res.send($info(response)))
-                .catch(error => res.send($error(error, "Confirm whether your parameters are incorrect or your server is offline.")));
+                .then(response => inf(response))
+                .catch(error => err(error));
             break;
     }
 

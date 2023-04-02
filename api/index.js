@@ -1,7 +1,5 @@
+import { $json_error } from "../.lib/API";
+
 export default (req, res) => {
-    res.status(200).setHeader("Content-Type", "application/json").send(JSON.stringify({
-            code: 200,
-            message: "Hi there, welcome to Peckot API.",
-            advice: "Refer to docs.peckot.com for more."
-        }, null, 4));
+    $json_error(res, 200, "Hi there, welcome to Peckot API.", "Refer to docs.peckot.com for more.");
 }

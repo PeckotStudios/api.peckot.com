@@ -1,5 +1,6 @@
 /**
  * PCL2HomePage API
+ * RequireAuthorize: false
  * Description: This API provides functionality for handling requests and responses to the PCL2HomePage.
  * Dependencies: This module relies on external dependencies such as mongodb, axios, and minecraft-server-status; make sure they are properly installed via package.json.
  * Request: <Type> (Required) [Optional = {DefaultValue}]
@@ -15,7 +16,7 @@
  */
 
 // Dependencies
-import { error as $error } from "../.lib/API";
+import { $json_error } from "../.lib/API";
 import { get } from "axios";
 import { readFileSync } from "fs";
 import { MinecraftServerListPing as mslp } from "minecraft-status";
@@ -36,7 +37,7 @@ export default async (req, res) => {
     try {
         source += readFileSync(`${__dirname}/../public/PCL2HomePage/source.xaml`, "utf-8");
     } catch (error) {
-        res.send($error(error, "Confirm whether the source file is available."));
+        res.send($json_error(error, "Confirm whether the source file is available."));
         return;
     }
 

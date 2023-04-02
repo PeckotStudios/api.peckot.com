@@ -19,10 +19,16 @@
  */
 
 // Dependencies
-import { info as $info, error as $error } from "../.lib/API";
+import { $authorize, $json_error, $json_info } from "../.lib/API";
 import { get } from "axios";
 
-export default (req, res) => {
+export default async (req, res) => {
+    // Authorization
+    if (!(await $authorize("BingDailyWallpaper", req.headers.authorization))) {
+        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization parameters.");
+        return;
+    }
+
     // Input arguments
     const {
         area = "cn",        // 壁纸地域 iso2
@@ -45,23 +51,23 @@ export default (req, res) => {
     get(`${_url}/HPImageArchive.aspx?cc=${_area}&format=js&idx=${_date}&n=${_num}`).then(response => {
         if (_type == "image") {
             res.status(200).setHeader("Content-Type", "image/png")
-                .redirect(_url + new String(response.data.images[0].url).replace(/1920x1080/g, _size));
+                .redirect(_url + new String(response.data.images[0].url).replace(/1920x1080/, _size));
             return;
         } else {
             var _images = new Array();
             response.data.images.forEach(image => {
                 _images.push({
                     date: image.enddate,
-                    url: _url + new String(image.url).replace(/1920x1080/g, _size),
+                    url: _url + new String(image.url).replace(/1920x1080/, _size),
                     copyright: image.copyright,
                     copyrightlink: image.copyrightlink,
                     hashcode: image.hsh,
                 });
             });
-            return res.setHeader("Content-Type", "application/json").send($info({ images: _images }));
+            return $json_info(res, 200, { images: _images });
         }
     }).catch(error => {
-        return res.setHeader("Content-Type", "application/json").send($error(error, "Confirm whether your parameters are correct."));
+        return $json_error(res, 504, error);
     });
 
 }
