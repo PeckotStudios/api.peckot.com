@@ -36,7 +36,7 @@ export default async (req, res) => {
 
     // 输入参数
     let query = req.query;
-    if (req.method == "POST") query = req.body ? JSON.parse(req.body) : {};
+    if (req.method == "POST") query = req.body ? req.body : {};
     if (!query.operation) query.operation = "pick";
 
     // 主处理流程
