@@ -101,16 +101,15 @@ export default async (req, res) => {
                 _content = content, _platform = platform, _nick = nick, _uid = uid;
             } else {
                 const { content, from } = query;
-                var _from;
                 if (!content) {
                     $json_error(res, 400, "Invalid argument `content` given!");
                     return;
                 }
-                if (!(from && (_from = JSON.parse(from)) &&_from.platform && _from.thrower && _from.thrower.nick && _from.thrower.uid)) {
+                if (!(from && from.platform && from.thrower && from.thrower.nick && from.thrower.uid)) {
                     $json_error(res, 400, "Invalid argument `from` given!");
                     return;
                 }
-                _content = content, _platform = _from.platform, _nick = _from.thrower.nick, _uid = _from.thrower.uid;
+                _content = content, _platform = from.platform, _nick = from.thrower.nick, _uid = from.thrower.uid;
             }
             const throwing = {
                 i: 100000 + historyAmount,
