@@ -47,7 +47,7 @@ export default async (req, res) => {
     const existingBottles = configDocument && configDocument.bottles ? configDocument.bottles.map(n => Number.parseInt(n, 10)) : []; // 获取所有已经存在的漂流瓶
     const historyAmount = configDocument && configDocument.amount ? configDocument.amount : 0; // 获取历史漂流瓶数量
 
-    switch (operation) {
+    switch (query.operation) {
         case "remove": // 删除一批漂流瓶
             if (new String(req.headers.authorization).replace(/Bearer pkt-/, "").trim() != process.env.ADMIN_KEY) {
                 $json_error(res, 403, "No permission!"); // 没有权限
