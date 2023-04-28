@@ -25,7 +25,7 @@ import { MinecraftServerListPing, MinecraftQuery } from "minecraft-status";
 export default async (req, res) => {
     // Authorization
     if (!(await $authorize("MinecraftServerStatus", req.headers.authorization))) {
-        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization parameters.");
+        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization header.");
         return;
     }
     

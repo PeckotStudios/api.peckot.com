@@ -16,7 +16,7 @@ import { $authorize, $json_error } from "../.lib/API";
 export default async (req, res) => {
     // Authorization
     if (!(await $authorize("LinkJump", req.headers.authorization))) {
-        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization parameters.");
+        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization header.");
         return;
     }
     

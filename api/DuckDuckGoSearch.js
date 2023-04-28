@@ -24,7 +24,7 @@ import axios from "axios";
 export default async (req, res) => {
     // Authorization
     if (!(await $authorize("DuckDuckGoSearch", req.headers.authorization))) {
-        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization parameters.");
+        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization header.");
         return;
     }
 

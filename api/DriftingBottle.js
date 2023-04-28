@@ -30,7 +30,7 @@ import { randomInt } from "crypto";
 export default async (req, res) => {
     // 授权检查
     if (!(await $authorize("DriftingBottle", req.headers.authorization))) {
-        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization parameters.");
+        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization header.");
         return;
     }
 
@@ -80,7 +80,7 @@ export default async (req, res) => {
         case "throw": // 投掷漂流瓶
             const input = query.input;
             var _content, _platform, _nick, _uid;
-            if (input && input.toLowerCase() == "flat") {
+            if (req.method != "POST" && input && input.toLowerCase() == "flat") {
                 const { content, platform, nick, uid } = query;
                 if (!content) {
                     $json_error(res, 400, "Invalid argument `content` given!");
