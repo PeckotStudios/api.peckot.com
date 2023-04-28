@@ -61,7 +61,7 @@ export default async (req, res) => {
                         $json_info(res, 200, {
                             messages: [
                                 {
-                                    timestamp: response.ts,
+                                    timestamp: parseFloat(response.ts),
                                     channel_id: channelId,
                                     sender_id: response.message.user,
                                     content: prompt,
@@ -105,7 +105,7 @@ export default async (req, res) => {
                         $json_info(res, 200, {
                             messages: messages.map((msg) => {
                                 return {
-                                    timestamp: msg.ts,
+                                    timestamp: parseFloat(msg.ts),
                                     channel_id: channelId,
                                     sender_id: msg.user,
                                     content: msg.text,
