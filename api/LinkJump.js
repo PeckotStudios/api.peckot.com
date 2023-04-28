@@ -11,21 +11,21 @@
  * @param {*} res - Express response object
  */
 
-import { $authorize, $json_error } from "../.lib/API";
+import { $authorize, $json_error } from "../.lib/API"
 
 export default async (req, res) => {
     // Authorization
     if (!(await $authorize("LinkJump", req.headers.authorization))) {
-        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization header.");
-        return;
+        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization header.")
+        return
     }
     
     // Input arguments
     const {
         url = encodeURIComponent("https://api.peckot.com/"),
-    } = req.query;
-    const prompt = decodeURIComponent(url);
+    } = req.query
+    const prompt = decodeURIComponent(url)
 
     // Main process
-	res.redirect(prompt);
+	res.redirect(prompt)
 }

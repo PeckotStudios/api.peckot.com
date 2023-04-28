@@ -11,8 +11,8 @@ export default async (req, res) => {
     console.log("Authorization succeeded!")
 
     // 输入参数
-    let query = req.query;
-    if (req.method == "POST") query = req.body ? req.body : {};
+    let query = req.query
+    if (req.method == "POST") query = req.body ? req.body : {}
     console.debug("Getting operation and parameters...")
     const operation = query.operation ? query.operation : "chat"
     const slackAuth = req.headers["slack-authorization"]
