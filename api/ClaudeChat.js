@@ -111,7 +111,7 @@ export default async (req, res) => {
                                     content: msg.text,
                                     length: msg.text.length
                                 }
-                            })
+                            }).reverse()
                         })
                     }
                 } catch (error) {
