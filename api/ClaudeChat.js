@@ -75,9 +75,9 @@ export default async (req, res) => {
                     if (++sendRetry > 3) $json_error(res, 500, `Tried 3 times and failed to send message! ${error}`)
                 }
             }
-        case "recieve":
+        case "receive":
             console.debug("Handling receive operation...")
-            var timestamp, recieveRetry = 0
+            var timestamp, receiveRetry = 0
             if (!(timestamp = query.timestamp)) {
                 $json_error(res, 400, "Invalid argument `timestamp` given!")
                 return
@@ -111,12 +111,12 @@ export default async (req, res) => {
                                     content: msg.text,
                                     length: msg.text.length
                                 }
-                            }).reverse()
+                            })
                         })
                     }
                 } catch (error) {
                     console.error(error)
-                    if (++recieveRetry > 3) $json_error(res, 500, `Tried 3 times and failed to recieve message! ${error}`)
+                    if (++receiveRetry > 3) $json_error(res, 500, `Tried 3 times and failed to receive message! ${error}`)
                 }
             }
         default:
