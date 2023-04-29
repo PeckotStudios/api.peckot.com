@@ -49,13 +49,13 @@ export default async (req, res) => {
             }
             while (true) {
                 try {
-                    // 发送消息 
+                    // 发送消息
                     console.debug("Sending prompt message...")
                     const response = await client.chat.postMessage({
                         channel: channelId,
                         text: prompt
                     })
-                    // 返回结果  
+                    // 返回结果
                     console.log("Prompt sent successfully!")
                     if (response.ok) {
                         $json_info(res, 200, {
@@ -84,23 +84,23 @@ export default async (req, res) => {
             }
             while (true) {
                 try {
-                    // 接收消息  
+                    // 接收消息
                     console.debug("Receiving messages after timestamp...")
                     const messages = (await client.conversations.history({
                         channel: channelId,
                         oldest: timestamp
                     })).messages.filter((msg) => msg.user === botId)
-                    // 无返回消息  
+                    // 无返回消息
                     console.log("Messages received:", messages)
                     if (messages.length <= 0) {
                         $json_error(res, 504, "Claude is down without response.", "Please send your prompt again.")
                     }
-                    // 返回输入中              
+                    // 返回输入中
                     else if (messages[messages.length - 1].text.endsWith("Typing…_")) {
                         console.log("Claude is typing...")
                         $json_error(res, 504, "Claude is typing...", "Please wait for a while and try again later.")
                     }
-                    // 返回结果                     
+                    // 返回结果
                     else {
                         $json_info(res, 200, {
                             messages: messages.map((msg) => {
