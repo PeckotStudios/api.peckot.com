@@ -20,6 +20,7 @@
     "minecraft-status": "^1.1.0",
     "mongodb": "^4.12.1",
     "path-pattern": "^2.1.1",
+    "slack-emoji-to-ios": "^1.0.2",
     "ws": "^8.11.0"
   }
 }

@@ -38,3 +38,10 @@ export async function $authorize(api, key) {
     }
     return false;
 }
+
+export function $emoji(text) {
+    const emojis = require("./emojis").default
+    return text.replace(/:([a-z0-9_\-]+):/g, (match, name) => {
+        return emojis[name] || match;
+    });
+}
