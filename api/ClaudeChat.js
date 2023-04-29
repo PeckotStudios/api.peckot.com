@@ -95,7 +95,7 @@ export default async (req, res) => {
                                     content: $emoji(msg.text),
                                     length: msg.text.length
                                 }
-                            })
+                            }).reverse()
                         })
                     }
                 } catch (error) {
