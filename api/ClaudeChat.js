@@ -69,6 +69,7 @@ export default async (req, res) => {
                                 }
                             ]
                         }, "Prompt sent successfully!")
+                        break
                     } else throw "Invalid response!"
                 } catch (error) {
                     console.error(error)
@@ -94,11 +95,13 @@ export default async (req, res) => {
                     console.log("Messages received:", messages)
                     if (messages.length <= 0) {
                         $json_error(res, 504, "Claude is down without response.", "Please send your prompt again.")
+                        break
                     }
                     // 返回输入中
                     else if (messages[messages.length - 1].text.endsWith("Typing…_")) {
                         console.log("Claude is typing...")
                         $json_error(res, 504, "Claude is typing...", "Please wait for a while and try again later.")
+                        break
                     }
                     // 返回结果
                     else {
@@ -113,6 +116,7 @@ export default async (req, res) => {
                                 }
                             })
                         })
+                        break
                     }
                 } catch (error) {
                     console.error(error)
