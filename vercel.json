@@ -6,6 +6,10 @@
       "dest": "/101984499.json"
     },
     {
+      "src": "/LinkJump/102094094.json",
+      "dest": "/102094094.json"
+    },
+    {
       "src": "/RP/(.*)",
       "dest": "https://$1"
     },
