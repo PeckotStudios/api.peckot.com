@@ -11,14 +11,14 @@
  * @param {*} res - Express response object
  */
 
-import { $authorize, $json_error } from "../.lib/API"
+// import { $authorize, $json_error } from "../.lib/API"
 
 export default async (req, res) => {
     // Authorization
-    if (!(await $authorize("LinkJump", req.headers.authorization))) {
-        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization header.")
-        return
-    }
+    // if (!(await $authorize("LinkJump", req.headers.authorization))) {
+    //     $json_error(res, 401, "Access unauthorized!", "Please complete the authorization header.")
+    //     return
+    // }
     
     // Input arguments
     const {
