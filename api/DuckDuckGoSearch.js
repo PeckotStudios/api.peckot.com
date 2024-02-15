@@ -17,16 +17,11 @@
  */
 
 // Dependencies
-import { $authorize, $json_error, $json_info } from "../.lib/API"
+import { $json_error, $json_info } from "../.lib/API"
 import { JSDOM } from "jsdom"
 import axios from "axios"
 
 export default async (req, res) => {
-    // Authorization
-    if (!(await $authorize("DuckDuckGoSearch", req.headers.authorization))) {
-        $json_error(res, 401, "Access unauthorized!", "Please complete the authorization header.")
-        return
-    }
 
     // Input arguments
     const {
