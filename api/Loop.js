@@ -1,15 +1,16 @@
 import { request, get } from 'https';
 
 export default async (req, res) => {
+    
     const {
-        authParam = null,
+        auth = null,
     } = req.query
 
     const loopAuth = process.env.LOOP_AUTH;
     const targetTime = new Date('2024-09-25T17:50:00+08:00');
 
     // 检查auth参数
-    if (authParam !== loopAuth) {
+    if (auth !== loopAuth) {
         res.status(500).send('Unauthorized');
         return;
     }
@@ -24,32 +25,32 @@ export default async (req, res) => {
     // 等待1秒
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const postData = JSON.stringify({ message: 'Heartbeat' });
+    // const postData = JSON.stringify({ message: 'Heartbeat' });
 
-    const options = {
-        hostname: 'cn-jn-lt-plustmp1.natfrp.cloud',
-        port: 55862,
-        path: '/',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(postData),
-        },
-    };
+    // const options = {
+    //     hostname: 'cn-jn-lt-plustmp1.natfrp.cloud',
+    //     port: 55862,
+    //     path: '/',
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Content-Length': Buffer.byteLength(postData),
+    //     },
+    // };
 
-    const req2 = request(options, (res) => {
-        res.on('data', (d) => {
-            process.stdout.write(d);
-        });
-    });
+    // const req2 = request(options, (res) => {
+    //     res.on('data', (d) => {
+    //         process.stdout.write(d);
+    //     });
+    // });
 
-    req2.on('error', (e) => {
-        console.error(e);
-    });
+    // req2.on('error', (e) => {
+    //     console.error(e);
+    // });
 
-    // 写入数据
-    req2.write(postData);
-    req2.end();
+    // // 写入数据
+    // req2.write(postData);
+    // req2.end();
 
     // 异步GET请求
     const url = `https://api.peckot.com/Loop?auth=${loopAuth}`;
