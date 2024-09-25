@@ -55,7 +55,7 @@ export default async (req, res) => {
 
     // 异步GET请求
     const url = `https://api.peckot.com/Loop?date=${date}auth=${loopAuth}`;
-    new Promise((resolve, reject) => {
+    await new Promise((resolve, reject) => {
         get(url, (res) => {
             res.on('data', () => { });
             res.on('end', resolve);
