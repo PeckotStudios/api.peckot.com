@@ -53,7 +53,7 @@ exports.handler = async (event) => {
     req.end();
 
     // 异步GET请求
-    const url = `https://api.peckot.com/_Loop?auth=${loopAuth}`;
+    const url = `https://api.peckot.com/Loop?auth=${loopAuth}`;
     new Promise((resolve, reject) => {
         https.get(url, (res) => {
             res.on('data', () => { });
