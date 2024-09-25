@@ -4,10 +4,11 @@ export default async (req, res) => {
     
     const {
         auth = null,
+        date = '2024-09-25T17:50:00+08:00'
     } = req.query
 
     const loopAuth = process.env.LOOP_AUTH;
-    const targetTime = new Date('2024-09-25T17:50:00+08:00');
+    const targetTime = new Date(date);
 
     // 检查auth参数
     if (auth !== loopAuth) {
