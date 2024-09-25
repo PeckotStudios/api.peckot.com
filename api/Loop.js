@@ -1,28 +1,27 @@
-const https = require('https');
+import { request, get } from 'https';
 
-exports.handler = async (event) => {
-    const authParam = event.queryStringParameters.auth;
+export default async (req, res) => {
+    const {
+        authParam = null,
+    } = req.query
+
     const loopAuth = process.env.LOOP_AUTH;
     const targetTime = new Date('2024-09-25T17:50:00+08:00');
 
     // 检查auth参数
     if (authParam !== loopAuth) {
-        return {
-            statusCode: 500,
-            body: 'Unauthorized',
-        };
+        res.status(500).send('Unauthorized');
+        return;
     }
 
     // 检查当前时间
     const currentTime = new Date();
     if (currentTime > targetTime) {
-        return {
-            statusCode: 500,
-            body: 'Stopped',
-        };
+        res.status(500).send('Stopped');
+        return;
     }
 
-    // 等待1秒后异步调用自身
+    // 等待1秒
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const postData = JSON.stringify({ message: 'Heartbeat' });
@@ -38,31 +37,29 @@ exports.handler = async (event) => {
         },
     };
 
-    const req = https.request(options, (res) => {
+    const req2 = request(options, (res) => {
         res.on('data', (d) => {
             process.stdout.write(d);
         });
     });
 
-    req.on('error', (e) => {
+    req2.on('error', (e) => {
         console.error(e);
     });
 
     // 写入数据
-    req.write(postData);
-    req.end();
+    req2.write(postData);
+    req2.end();
 
     // 异步GET请求
     const url = `https://api.peckot.com/Loop?auth=${loopAuth}`;
     new Promise((resolve, reject) => {
-        https.get(url, (res) => {
+        get(url, (res) => {
             res.on('data', () => { });
             res.on('end', resolve);
         }).on('error', reject);
     });
 
-    return {
-        statusCode: 200,
-        body: 'Looping',
-    };
-};
+    res.status(200).send('Looping');
+    return;
+}
