@@ -36,8 +36,9 @@ const options = {
 export default async (req, res) => {
     $(req, res);
 
-    // 输入参数
-    const { sid, password } = req.query; 
+    // 输入并处理参数
+    const { sid, password } = req.query;
+    if (undefined === sid || undefined === password) return $.error('请输入正确的学号和密码！');
 
     /**
      * 主进程
@@ -48,37 +49,50 @@ export default async (req, res) => {
     args.password = password;
     options.headers['Content-Length'] = Buffer.byteLength(Qstringify(args));
 
-    // 等待登录完成
-    const status = await new Promise((resolve) => {
-        // 登录请求
-        const request = Hrequest(options, r => {
-            // 设置返回值字符集
-            r.setEncoding('utf-8');
-            // 获取Set-Cookie
-            let cookie = r.headers['set-cookie']?.map(c => c.substring(0, c.indexOf(';'))).join('; ');
-            // 请求到数据并保存
-            let response = '';
-            r.on('data', d => response += d);
-            // 请求结束，设置返回值
-            r.on('end', () => {
-                let o = JSON.parse(response);
-                let result = {};
-                result.sid = o.sno;
-                result.name = o.name;
-                result.cookie = cookie;
-                result.access_token = o.access_token;
-                result.refresh_token = o.refresh_token;
-                resolve([true, result]);
-            });
-        });
-        // 登录出错
-        request.on('error', e => resolve([false, e]));
-        // 传入参数
-        request.write(Qstringify(args));
-        request.end();
-    });
+    // 设置输出结构
+    const output = {
+        sid: null,
+        name: null,
+        cookie: null,
+        access_token: null,
+        refresh_token: null,
+    };
 
-    // 检查登录情况并返回内容
-    if (status[0]) return $.emit(status[1]);
-    else return $.error(e, 500);
+        // 等待登录完成
+        const result = await new Promise((resolve) => {
+            // 登录请求
+            const request = Hrequest(options, r => {
+                // 设置返回值字符集
+                r.setEncoding('utf-8');
+                // 获取Set-Cookie
+                output.cookie = r.headers['set-cookie']?.map(c => c.substring(0, c.indexOf(';'))).join('; ');
+                // 请求到数据并保存
+                let response = '';
+                r.on('data', d => response += d);
+                // 请求结束，设置返回值
+                r.on('end', () => {
+                    let o = JSON.parse(response);
+                    resolve([true, o]);
+                });
+            });
+            // 登录出错
+            request.on('error', e => resolve([false, e]));
+            // 传入参数
+            request.write(Qstringify(args));
+            request.end();
+        });
+
+        // 检查登录情况
+        if (!result[0]) return $.error(e, 500); // 网络通信错误
+        if (result[1].code == 400) return $.error('请输入正确的学号！'); // 学号为空
+        if (result[1].code == 8000) return $.error('学号或密码错误，请重试！'); // 密码错误
+        
+        // 登录成功，设置输出内容
+        output.sid = result[1].sno;
+        output.name = result[1].name;
+        output.access_token = result[1].access_token;
+        output.refresh_token = result[1].refresh_token;
+
+        // 最终输出
+        return $.emit(output);
 }
