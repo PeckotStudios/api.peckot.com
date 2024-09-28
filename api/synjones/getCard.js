@@ -1,5 +1,4 @@
 import { request as Hrequest } from "http";
-import { stringify as Qstringify } from "querystring";
 
 import $ from "../../.lib/$";
 
@@ -68,7 +67,6 @@ export default async (req, res) => {
         // 登录出错
         request.on('error', e => resolve([false, e]));
         // 传入参数
-        request.write(Qstringify(args));
         request.end();
     });
 
