@@ -36,7 +36,6 @@ const loginOptions = {
 
 const cardOptions = {
     hostname: '121.251.19.62',
-    port: 443,
     path: '/berserker-app/ykt/tsm/queryCard?synAccessSource=h5',
     method: 'GET',
     headers: {
@@ -84,7 +83,7 @@ function _getCard(cookie, token) {
 async function getUserCache(username, password = null) {
     const mongoClient = new MongoClient(process.env.MONGODB_URI);
     const authCacheCollection = mongoClient.db('synjones').collection('authCache');
-    const userDocument = await authCacheCollection.findOne({ username: username });
+    const userDocument = await authCacheCollection.findOne({ username });
     const result = {
         username,
         cookie: null,
@@ -124,16 +123,14 @@ async function getUserCache(username, password = null) {
                 let response = '';
                 res.on('data', r => response += r);
                 // 请求结束，保存到缓存
-                res.on('end', () => {
+                res.on('end', async () => {
                     let o = JSON.parse(r);
                     result.username = o.sno;
                     result.cookie = cookie;
                     result.access_token = o.access_token;
                     result.refresh_token = o.refresh_token;
-                    authCacheCollection.insertOne(result)
-                        .then(_ignored => { })
-                        .catch(e => $json_error(res, 500, e))
-                    resolve(null);
+                    await authCacheCollection.insertOne(result);
+                    resolve();
                 });
             });
             req.on('error', e => $json_error(res, 500, e));
