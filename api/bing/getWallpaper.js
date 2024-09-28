@@ -19,7 +19,7 @@
  */
 
 // Dependencies
-import { $json_error, $json_info } from "../.lib/API"
+import { $json_error, $json_info } from "../../.lib/$"
 import { get } from "axios"
 
 export default async (req, res) => {

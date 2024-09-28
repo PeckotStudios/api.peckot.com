@@ -1,5 +1,6 @@
-import { $json_error } from "../.lib/API"
+import $ from "../.lib/$";
 
 export default (req, res) => {
-    $json_error(res, 200, "Hi there, welcome to Peckot API.", "Refer to docs.peckot.com for more.")
+    $(req, res);
+    $.info("Hi there, welcome to Peckot API.", "Refer to docs.peckot.com for more.");
 }
