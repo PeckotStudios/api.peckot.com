@@ -82,8 +82,8 @@ function _getCard(cookie, token) {
 }
 
 async function getUserCache(username, password = null) {
-    const mongoClient = new MongoClient(process.env.MONGODB_URI).db('synjones');
-    const authCacheCollection = mongoClient.collection('authCache');
+    const mongoClient = new MongoClient(process.env.MONGODB_URI);
+    const authCacheCollection = mongoClient.db('synjones').collection('authCache');
     const userDocument = await authCacheCollection.findOne({ username: username });
     const result = {
         username,
