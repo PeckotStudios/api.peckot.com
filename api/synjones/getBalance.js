@@ -73,7 +73,7 @@ function _getCard(cookie, token) {
             res.setEncoding('utf-8');
             let response = '';
             res.on('data', r => response += r);
-            res.on('end', () => resolve(response));
+            res.on('end', () => resolve(JSON.parse(response)));
         });
         req.on('error', e => reject(e));
         req.end();
