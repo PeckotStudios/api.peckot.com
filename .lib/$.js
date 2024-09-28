@@ -15,12 +15,12 @@ class API {
     }
     check(...args) {
         for (let arg of args)
-            return !(
+            if (
                 undefined === arg ||
                 null === arg ||
                 '' == arg ||
                 '' == arg.trim()
-            );
+            ) return false;
         return true;
     }
     info(info, code = 200, status = 'Success') {
