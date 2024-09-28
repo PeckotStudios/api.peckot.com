@@ -14,7 +14,6 @@ const options = {
         'Proxy-Connection': 'keep-alive',
         'Referer': 'http://121.251.19.62/plat/wode',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0',
-        'Synjones-Auth': 'Bearer '
     }
 };
 
@@ -26,7 +25,8 @@ export default async (req, res) => {
     if (!$.check(token)) return $.error('请输入正确的Token！');
 
     // 初始化请求选项
-    options.headers['Synjones-Auth'] += token;
+    options.headers['Synjones-Auth'] = `Bearer ${token}`;
+    console.log(options);
 
     // 设置输出结构
     const output = {
@@ -66,7 +66,7 @@ export default async (req, res) => {
 
     // 检查登录情况
     if (!result[0]) return $.error(e, 500); // 网络通信错误
-    if (result[1].code == 401) return $.error(result[1], 401); // Token无效或过期
+    if (result[1].code == 401) return $.error('Token无效或已过期！', 401); // Token无效或过期
 
     // 登录成功，设置输出内容
     output.account = result[1].data.card[0].account;
