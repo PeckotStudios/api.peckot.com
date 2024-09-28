@@ -1,5 +1,5 @@
 // 引入依赖
-import { $json_error, $json_info } from '../.lib/API'
+import { $json_error, $json_info } from '../../.lib/API'
 import { request } from 'http';
 import { MongoClient } from 'mongodb'
 import { stringify as Qstringify } from 'querystring';
