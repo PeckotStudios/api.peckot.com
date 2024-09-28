@@ -29,16 +29,16 @@ export default async (req, res) => {
 
     // 设置输出结构
     const output = {
-        account: null,
-        card_name: null,
-        balance: null,
-        expire_date: null,
-        profile: {
-            name: null,
-            major: null,
-            phone: null,
-            id_card: null,
-            bank_account: null,
+        account: null,          // 卡号
+        card_name: null,        // 卡名
+        balance: null,          // 卡余额 单位为 分
+        expire_date: null,      // 过期日期
+        profile: {              // 个人信息
+            name: null,         // 姓名
+            major: null,        // 专业
+            phone: null,        // 手机号
+            id_card: null,      // 身份证号
+            bank_account: null, // 银行卡号
         }
     };
 

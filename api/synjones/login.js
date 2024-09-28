@@ -49,8 +49,8 @@ export default async (req, res) => {
 
     // 设置输出结构
     const output = {
-        sid: null,
-        name: null,
+        sid: null,      // 学号
+        name: null,     // 姓名
         // set_cookie: null,
         access_token: null,
         refresh_token: null,
