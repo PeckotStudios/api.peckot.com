@@ -49,12 +49,12 @@ class API {
             case 'symbol':
                 ret.code = code;
                 ret.status = status;
-                ret.message = `An error occured: ${error}`;
+                ret.message = `Error: ${error}`;
                 break;
             case 'object':
                 ret.code = code;
                 ret.status = status;
-                ret.message = `An error occured: ${error}`;
+                ret.message = `Error: ${error}`;
                 ret.error = error;
                 break;
         }
