@@ -1,9 +1,3 @@
-const template = {
-    code: -1,
-    status: 'Unknown',
-    message: 'null',
-}
-
 class API {
     constructor() {
         this.req = null;
@@ -24,7 +18,7 @@ class API {
         return true;
     }
     info(info, code = 200, status = 'Success') {
-        let ret = template;
+        let ret = {};
         switch (typeof info) {
             case 'undefined':
             case 'function':
@@ -46,7 +40,7 @@ class API {
             .send(JSON.stringify(ret, null, 4));
     }
     error(error, code = 500, status = 'Failed') {
-        let ret = template;
+        let ret = {};
         switch (typeof error) {
             default:
             case 'undefined':
@@ -74,7 +68,7 @@ class API {
             .send(JSON.stringify(ret, null, 4));
     }
     emit(data, code = 200, status = 'Success') {
-        let ret = template;
+        let ret = {};
         ret.code = code;
         ret.status = status;
         ret.message = `Data request ${status.toLocaleLowerCase()}!`;
