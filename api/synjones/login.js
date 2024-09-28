@@ -42,10 +42,6 @@ export default async (req, res) => {
     const { sid, password } = req.query;
     if (!$.check(sid, password)) return $.error('请输入正确的学号和密码！');
 
-    /**
-     * 主进程
-     */
-
     // 初始化登录参数
     args.username = sid;
     args.password = password;

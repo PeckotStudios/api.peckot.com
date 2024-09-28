@@ -25,13 +25,7 @@ export default async (req, res) => {
     const { token } = req.query;
     if (!$.check(token)) return $.error('请输入正确的Token！');
 
-    /**
-     * 主进程
-     */
-
     // 初始化请求选项
-    args.username = sid;
-    args.password = password;
     options.headers['Synjones-Auth'] += token;
 
     // 设置输出结构
