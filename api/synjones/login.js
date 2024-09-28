@@ -1,4 +1,6 @@
 import { request as Hrequest } from "http";
+import { stringify as Qstringify } from "querystring";
+
 import $ from "../../.lib/$";
 
 // 登录请求参数
