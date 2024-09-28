@@ -9,7 +9,7 @@ class API {
         this.req = null;
         this.res = null;
     }
-    __init__(req, res) {
+    init(req, res) {
         this.req = req;
         this.res = res;
     }
@@ -76,12 +76,6 @@ class API {
     }
 }
 
-const api = new API();
-
-const $ = (req, res) => api.__init__(req, res);
-
-$.info = api.info;
-$.error = api.error;
-$.emit = api.emit;
+const $ = new API();
 
 export default $;
