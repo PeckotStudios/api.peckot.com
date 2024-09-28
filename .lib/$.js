@@ -13,6 +13,16 @@ class API {
         this.req = req;
         this.res = res;
     }
+    check(...args) {
+        for (let arg of args)
+            return !(
+                undefined === arg ||
+                null === arg ||
+                '' == arg ||
+                '' == arg.trim()
+            );
+        return true;
+    }
     info(info, code = 200, status = 'Success') {
         let ret = template;
         switch (typeof info) {
