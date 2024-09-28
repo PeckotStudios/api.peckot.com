@@ -26,7 +26,6 @@ export default async (req, res) => {
 
     // 初始化请求选项
     options.headers['Synjones-Auth'] = `Bearer ${token}`;
-    console.log(options);
 
     // 设置输出结构
     const output = {
