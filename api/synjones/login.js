@@ -55,7 +55,7 @@ export default async (req, res) => {
     const output = {
         sid: null,
         name: null,
-        cookie: null,
+        // set_cookie: null,
         access_token: null,
         refresh_token: null,
     };
@@ -66,8 +66,8 @@ export default async (req, res) => {
         const request = Hrequest(options, r => {
             // 设置返回值字符集
             r.setEncoding('utf-8');
-            // 获取Set-Cookie
-            output.cookie = r.headers['set-cookie']?.map(c => c.substring(0, c.indexOf(';'))).join('; ');
+            // 获取Set-Cookie (暂时不需要)
+            // output.set_cookie = r.headers['set-cookie']?.map(c => c.substring(0, c.indexOf(';'))).join('; ');
             // 请求到数据并保存
             let response = '';
             r.on('data', d => response += d);
