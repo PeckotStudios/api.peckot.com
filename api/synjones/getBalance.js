@@ -142,5 +142,6 @@ async function getUserCache(username, password = null) {
             req.end();
         });
     }
+    mongoClient.close();
     return result;
 }
