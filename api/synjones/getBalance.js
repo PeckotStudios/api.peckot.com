@@ -124,7 +124,7 @@ async function getUserCache(username, password = null) {
                 res.on('data', r => response += r);
                 // 请求结束，保存到缓存
                 res.on('end', async () => {
-                    let o = JSON.parse(r);
+                    let o = JSON.parse(response);
                     result.username = o.sno;
                     result.cookie = cookie;
                     result.access_token = o.access_token;
