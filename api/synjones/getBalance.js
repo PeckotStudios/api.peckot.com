@@ -60,7 +60,7 @@ export default async (req, res) => {
 
     // 主进程
     const cache = await getUserCache(username, password);
-    const card = await _getCard(cache.cookie, cache.access_token);
+    const card = await _getCard(cache.cookie, cache.refresh_token);
 
     return $json_info(res, 200, card);
 }
