@@ -40,7 +40,7 @@ export default async (req, res) => {
 
     // 输入并处理参数
     const { sid, password } = req.query;
-    if ($.check(sid, password)) return $.error('请输入正确的学号和密码！');
+    if (!$.check(sid, password)) return $.error('请输入正确的学号和密码！');
 
     /**
      * 主进程
