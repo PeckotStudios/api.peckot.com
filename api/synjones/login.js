@@ -9,10 +9,10 @@ const args = {
     password: null,
     grant_type: 'password',
     scope: 'all',
-    loginFrom: 'h5',
+    loginFrom: 'API',
     logintype: 'sno',
-    device_token: 'h5',
-    synAccessSource: 'h5'
+    device_token: 'API',
+    synAccessSource: 'API'
 };
 
 // 登录请求选项
@@ -36,7 +36,7 @@ const options = {
 };
 
 export default async (req, res) => {
-    $.init(req, res);
+    $.init(req, res, 'POST');
 
     // 输入并处理参数
     const { sid, password } = req.query;

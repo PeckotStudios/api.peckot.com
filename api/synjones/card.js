@@ -5,7 +5,7 @@ import $ from "../../.lib/$";
 // 请求选项
 const options = {
     hostname: '121.251.19.62',
-    path: '/berserker-app/ykt/tsm/queryCard?synAccessSource=h5',
+    path: '/berserker-app/ykt/tsm/queryCard?synAccessSource=API',
     method: 'GET',
     headers: {
         'Accept': '*/*',
@@ -18,7 +18,7 @@ const options = {
 };
 
 export default async (req, res) => {
-    $.init(req, res);
+    $.init(req, res, 'GET');
 
     // 输入并处理参数
     const { token } = req.query;
@@ -70,16 +70,31 @@ export default async (req, res) => {
     // 登录成功，设置输出内容
     output.account = result[1].data.card[0].account;
     output.card_name = result[1].data.card[0].cardname;
-    output.balance = result[1].data.card[0].db_balance;
+    output.balance = parseInt(result[1].data.card[0].db_balance) + parseInt(result[1].data.card[0].unsettle_amount);
     output.expire_date = result[1].data.card[0].expdate;
     output.profile = {
         name: result[1].data.card[0].name,
         major: result[1].data.card[0].department_name,
-        phone: result[1].data.card[0].phone,
-        id_card: result[1].data.card[0].cert,
-        bank_account: result[1].data.card[0].bankacc,
+        phone: desensitize(result[1].data.card[0].phone, '__*******__'),
+        id_card: desensitize(result[1].data.card[0].cert, '___*************__'),
+        bank_account: desensitize(result[1].data.card[0].bankacc, '___**************__'),
     }
 
     // 最终输出
     return $.emit(output);
+}
+
+// 信息脱敏
+function desensitize(str, format) {
+    if (!/^[_*]+$/.test(format)) throw new Error('Invalid format: must only contain _ and *');
+
+    const showStart = format.indexOf('*');
+    const showEnd = format.lastIndexOf('*') + 1;
+
+    const startPart = str.slice(0, showStart);
+    const endPart = str.slice(-1 * (str.length - showEnd));
+    const maskLength = str.length - startPart.length - endPart.length;
+    const maskPart = '*'.repeat(maskLength);
+
+    return startPart + maskPart + endPart;
 }

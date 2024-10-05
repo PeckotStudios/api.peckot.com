@@ -3,9 +3,10 @@ class API {
         this.req = null;
         this.res = null;
     }
-    init(req, res) {
+    init(req, res, method) {
         this.req = req;
         this.res = res;
+        if (req.method != method) return this.error(`Method ${req.method} was not allowed`, 405);
     }
     check(...args) {
         for (let arg of args)
