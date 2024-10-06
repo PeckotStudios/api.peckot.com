@@ -3,10 +3,10 @@ class API {
         this.req = null;
         this.res = null;
     }
-    init(req, res, method) {
+    init(req, res, ...methods) {
         this.req = req;
         this.res = res;
-        if (req.method != method) return this.error(`Method ${req.method} was not allowed`, 405);
+        if (!methods || methods.includes(req.method)) return this.error(`Method ${req.method} was not allowed`, 405);
     }
     check(...args) {
         for (let arg of args)
@@ -78,6 +78,11 @@ class API {
             .setHeader('Content-Type', 'application/json')
             .status(code)
             .send(JSON.stringify(ret, null, 4));
+    }
+    redirect(url, code = 302) {
+        this.res
+            .status(code)
+            .redirect(url);
     }
 }
 

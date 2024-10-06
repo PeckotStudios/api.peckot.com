@@ -1,6 +1,11 @@
-export default async (req, res) => {
+import $ from "../../.lib/$";
+
+export default (req, res) => {
+    $.init(req, res);
+
     const {
         url = encodeURIComponent("https://api.peckot.com/"),
     } = req.query;
-	res.redirect(decodeURIComponent(url));
+
+	$.redirect(decodeURIComponent(url));
 }
