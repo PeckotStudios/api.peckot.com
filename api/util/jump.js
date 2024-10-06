@@ -7,5 +7,5 @@ export default (req, res) => {
         url = encodeURIComponent("https://api.peckot.com/"),
     } = req.query;
 
-	$.redirect(decodeURIComponent(url));
+	return $.redirect(decodeURIComponent(url));
 }
