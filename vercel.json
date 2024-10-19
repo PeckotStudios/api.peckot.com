@@ -2,20 +2,8 @@
   "version": 2,
   "routes": [
     {
-      "src": "/LinkJump/101984499.json",
-      "dest": "/101984499.json"
-    },
-    {
-      "src": "/LinkJump/102094094.json",
-      "dest": "/102094094.json"
-    },
-    {
-      "src": "/RP/(.*)",
-      "dest": "https://$1"
-    },
-    {
-      "src": "/api-key(.*)",
-      "dest": "/api/api-key$1"
+      "src": "/mathdf/([a-z]+)/render/",
+      "dest": "/mathdf/$1/render"
     },
     {
       "src": "/(.*)",
