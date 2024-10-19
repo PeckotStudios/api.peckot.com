@@ -6,7 +6,7 @@ class API {
     init(req, res, ...methods) {
         this.req = req;
         this.res = res;
-        if (!methods || methods.includes(req.method)) return this.error(`Method ${req.method} was not allowed`, 405);
+        //if (!methods || methods.includes(req.method)) return this.error(`Method ${req.method} was not allowed`, 405);
     }
     check(...args) {
         for (let arg of args)

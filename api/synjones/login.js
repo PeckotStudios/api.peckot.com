@@ -36,7 +36,7 @@ const options = {
 };
 
 export default async (req, res) => {
-    $.init(req, res, 'POST');
+    $.init(req, res, 'POST', 'GET');
 
     // 输入并处理参数
     const { sid, password } = req.query;
