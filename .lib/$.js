@@ -40,7 +40,7 @@ class API {
             .status(code)
             .send(JSON.stringify(ret, null, 4));
     }
-    error(error, code = 500, status = 'Failed') {
+    error(error, code = 400, status = 'Failed') {
         let ret = {};
         switch (typeof error) {
             default:
